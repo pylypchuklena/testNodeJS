@@ -10,7 +10,9 @@ export class HomePage extends React.Component<any,any>{
     }
     render(){
         return(
-            <div className="error-message">foo</div>
+            <React.Fragment>
+                <div className="error-message">Homepage</div>
+            </React.Fragment>
         )
     }
 

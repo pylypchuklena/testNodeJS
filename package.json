@@ -28,11 +28,13 @@
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-router": "^4.2.0",
+    "react-router-dom": "^4.2.2",
     "react-tap-event-plugin": "^3.0.2",
     "typescript": "^2.8.1",
     "validator": "^9.4.1"
   },
   "devDependencies": {
+    "@types/react-router-dom": "^4.2.6",
     "nodemon": "^1.17.2",
     "ts-loader": "^4.1.0",
     "webpack": "^4.3.0",
