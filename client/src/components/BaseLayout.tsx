@@ -24,13 +24,13 @@ export class BaseLayout extends React.Component<any, any>{
                                 <Link to="/singup" className="link">Sing In</Link>
                             </li>
                             <li>
-                                <UiButton primary={true} >UiButton</UiButton>
+                                <UiButton primary={true} btnSm={true}>UiButton</UiButton>
                             </li>
                             <li>
-                                <UiButton disabled={true} >UiButton</UiButton>
+                                <UiButton >UiButton</UiButton>
                             </li>
                             <li>
-                                <UiButton disabled={true} >UiButton</UiButton>
+                                <UiButton disabled={true} icon={'assets/github-logo.svg'} btnLg={true} >UiButtonIcon</UiButton>
                             </li>
                         </ul>
                     </nav>

@@ -9,17 +9,22 @@ import { HomePage } from './components/HomePage';
 import BaseLayout from './components/BaseLayout';
 import LoginForm from './components/LoginForm';
 import SingUpForm from './components/SingUpForm';
-
+import LoginPage from './containers/LoginPage';
+import SingUpPage from './containers/SingUpPage';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 
 ReactDom.render(
+    <MuiThemeProvider>
     <Router>
         <BaseLayout>
             <Route exact path="/" component={HomePage} />
-            <Route exact path="/login" component={LoginForm} />
-            <Route exact path="/singup" component={SingUpForm} />
+            <Route exact path="/login" component={LoginPage} />
+            <Route exact path="/singup" component={SingUpPage} />
         </BaseLayout>
-    </Router>,
+    </Router>
+    </MuiThemeProvider>
+    ,
 
     document.getElementById('app') as HTMLElement
 )

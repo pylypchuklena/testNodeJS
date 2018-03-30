@@ -19,17 +19,21 @@
   },
   "homepage": "https://github.com/pylypchuklena/testNodeJS#readme",
   "dependencies": {
+    "@types/material-ui": "^0.21.1",
     "@types/react": "^16.1.0",
     "@types/react-dom": "^16.0.4",
     "body-parser": "^1.18.2",
+    "css-loader": "^0.28.11",
     "ejs": "^2.5.8",
     "express": "^4.16.3",
+    "material-ui": "^0.20.0",
     "mongoose": "^5.0.12",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
     "react-tap-event-plugin": "^3.0.2",
+    "style-loader": "^0.20.3",
     "typescript": "^2.8.1",
     "validator": "^9.4.1"
   },
@@ -37,6 +41,7 @@
     "@types/react-router-dom": "^4.2.6",
     "nodemon": "^1.17.2",
     "ts-loader": "^4.1.0",
+    "typings-for-css-modules-loader": "^1.7.0",
     "webpack": "^4.3.0",
     "webpack-cli": "^2.0.13"
   }

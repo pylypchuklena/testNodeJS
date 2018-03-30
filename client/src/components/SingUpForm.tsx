@@ -1,5 +1,8 @@
 import * as React from 'react';
-
+import Card from 'material-ui/Card';
+import TextField from 'material-ui/TextField';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import { CardText, RaisedButton } from 'material-ui';
 export class SingUpForm extends React.Component<any, any>{
     /**
      *
@@ -10,19 +13,28 @@ export class SingUpForm extends React.Component<any, any>{
     }
     render() {
         return (
-            <React.Fragment>
-                <div className="mainContainer__box">
-                <div className="card">
-                    <h2>Sing Up</h2>
-                    <form action="" className="form">
-                        <input type="text" placeholder="Name" name="name" />
-                        <input type="text" placeholder="Email" name="email" />
-                        <input type="text" placeholder="password" name="password" />
-                        <button type="submit">Submit</button>
+          
+                <Card className="container">
+                    <h2 className='card-heading'>Sing Up</h2>
+                    <form action="" >
+                        <div className="field-line">
+                            <TextField floatingLabelText="Name"
+                                name="name" />
+                        </div>
+                        <div className="field-line">
+                            <TextField floatingLabelText="Email"
+                                name="email" />
+                        </div>
+                        <div className="field-line">
+                            <TextField floatingLabelText="Password"
+                                name="password" />
+                        </div>
+                        <div className="button-line">
+                            <RaisedButton type="submit">Submit</RaisedButton>
+                        </div>
                     </form>
-                </div>
-                </div>
-            </React.Fragment>
+                </Card >
+      
         )
     }
 }
