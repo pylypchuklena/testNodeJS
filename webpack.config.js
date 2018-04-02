@@ -16,21 +16,6 @@ module.exports = {
     module: {
         rules: [
             { test: /\.tsx$/, use: 'ts-loader' },
-            // {
-            //     test: /\.css$/,
-            //     include: path.join(__dirname, 'src'),
-            //     use: [
-            //         'style-loader',
-            //         {
-            //             loader: 'typing-for-css-modules-loader',
-            //             options: {
-            //                 modules: true,
-            //                 namedExport: true,
-            //                 camelCase: true,
-            //             },
-            //         },
-            //     ]
-            // }
             {
                 test: /\.css$/,
                 use: [

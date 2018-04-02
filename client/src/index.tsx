@@ -8,9 +8,9 @@ import {
 import { HomePage } from './components/HomePage';
 import BaseLayout from './components/BaseLayout';
 import LoginForm from './components/LoginForm';
-import SingUpForm from './components/SingUpForm';
+import SignUpForm from './components/SignUpForm';
 import LoginPage from './containers/LoginPage';
-import SingUpPage from './containers/SingUpPage';
+import SignUpPage from './containers/SignUpPage';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 
@@ -20,7 +20,7 @@ ReactDom.render(
         <BaseLayout>
             <Route exact path="/" component={HomePage} />
             <Route exact path="/login" component={LoginPage} />
-            <Route exact path="/singup" component={SingUpPage} />
+            <Route exact path="/signup" component={SignUpPage} />
         </BaseLayout>
     </Router>
     </MuiThemeProvider>

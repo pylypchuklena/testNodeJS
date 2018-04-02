@@ -21,16 +21,7 @@ export class BaseLayout extends React.Component<any, any>{
                                 <Link to="/login" className="link">Log In</Link>
                             </li>
                             <li>
-                                <Link to="/singup" className="link">Sing In</Link>
-                            </li>
-                            <li>
-                                <UiButton primary={true} btnSm={true}>UiButton</UiButton>
-                            </li>
-                            <li>
-                                <UiButton >UiButton</UiButton>
-                            </li>
-                            <li>
-                                <UiButton disabled={true} icon={'assets/github-logo.svg'} btnLg={true} >UiButtonIcon</UiButton>
+                                <Link to="/signup" className="link">Sign Up  </Link>
                             </li>
                         </ul>
                     </nav>

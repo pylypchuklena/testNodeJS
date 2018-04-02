@@ -1,37 +1,52 @@
 import * as React from 'react';
 import { Card, CardText } from 'material-ui/Card';
 import { TextField, RaisedButton } from 'material-ui';
+import { User, Errors } from './SignUpForm';
+import { Link } from 'react-router-dom';
 
-export class LoginForm extends React.Component<any, any>{
+interface IPropsLogin {
+    onSubmit: (e: any) => void;
+    onChange: (e: any) => void;
+    user: User;
+    error: Errors;
+}
+export class LoginForm extends React.Component<IPropsLogin, any>{
     /**
      *
      */
-    constructor(props: any) {
+    constructor(props: IPropsLogin) {
         super(props);
 
     }
     render() {
         return (
-        
-                <Card className="container">
-                    <h2 className='card-heading'>Login</h2>
-                    <form action="" >
 
-                        <div className="field-line">
-                            <TextField floatingLabelText="Email"
-                                name="email" />
-                        </div>
-                        <div className="field-line">
-                            <TextField floatingLabelText="Password"
-                                name="password" />
-                        </div>
-                        <div className="button-line">
-                            <RaisedButton type="submit">Submit</RaisedButton>
-                        </div>
-                    </form>
-    
-                </Card>
-                )
-            }
-        }
+            <Card className="container">
+                <form onSubmit={this.props.onSubmit} >
+                    <h2 className='card-heading'>Login</h2>
+                    <div className="field-line">
+                        <TextField
+                            floatingLabelText="Email"
+                            onChange={this.props.onChange}
+                            errorText={this.props.error.fieldEmail}
+                            name="email" />
+                    </div>
+                    <div className="field-line">
+                        <TextField
+                            errorText={this.props.error.fieldPassword}
+                            floatingLabelText="Password"
+                            type="password"
+                            onChange={this.props.onChange}
+                            name="password" />
+                    </div>
+                    <div className="button-line">
+                        <RaisedButton type="submit" label="Log in" primary />
+                    </div>
+                    <CardText>Don't have account? <Link to="/signup">Create one</Link></CardText>
+                </form>
+
+            </Card>
+        )
+    }
+}
 export default LoginForm;
