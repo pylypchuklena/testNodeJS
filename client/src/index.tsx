@@ -7,20 +7,22 @@ import {
 } from 'react-router-dom';
 import { HomePage } from './components/HomePage';
 import BaseLayout from './components/BaseLayout';
-import LoginForm from './components/LoginForm';
-import SignUpForm from './components/SignUpForm';
 import LoginPage from './containers/LoginPage';
 import SignUpPage from './containers/SignUpPage';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import { PrivateRoute } from './components/PrivateRoute';
+import { DashboardPage } from './containers/DashboardPage';
+import {Logout} from './components/Logout';
 
 
 ReactDom.render(
     <MuiThemeProvider>
     <Router>
         <BaseLayout>
-            <Route exact path="/" component={HomePage} />
-            <Route exact path="/login" component={LoginPage} />
-            <Route exact path="/signup" component={SignUpPage} />
+            <PrivateRoute exact path="/" component={DashboardPage}/>
+            <Route  path="/login" component={LoginPage} />
+            <Route  path="/signup" component={SignUpPage} />
+            <Route  path="/logout" component={Logout} />
         </BaseLayout>
     </Router>
     </MuiThemeProvider>

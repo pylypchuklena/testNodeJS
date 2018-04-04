@@ -1,17 +1,24 @@
 import * as React from 'react';
+import { Card, CardTitle, CardText } from 'material-ui';
 
-export class HomePage extends React.Component<any,any>{
+export class HomePage extends React.Component<any, any>{
     /**
      *
      */
-    constructor(props:any) {
+    constructor(props: any) {
         super(props);
-        
+
     }
-    render(){
-        return(
+    render() {
+        return (
             <React.Fragment>
-                <div className="error-message">Homepage</div>
+                <Card className="container">
+                    <CardTitle
+                        title="Homepage"
+                        subtitle="You get access to this page if you not authentication."
+                    />
+                    <CardText ><div className="error-message">Homepage</div></CardText>
+                </Card>
             </React.Fragment>
         )
     }

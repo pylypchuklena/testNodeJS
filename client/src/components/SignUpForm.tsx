@@ -10,6 +10,7 @@ interface IPropsSingUp {
     onChange: (e: any) => void;
     user: User;
     error: Errors;
+    
 }
 
 export class User {
@@ -43,6 +44,7 @@ export class SignUpForm extends React.Component<IPropsSingUp, any>{
 
                 <form onSubmit={this.props.onSubmit} >
                     <h2 className='card-heading'>Sign Up</h2>
+                    
                     {this.props.error.summary && <p className="error-message"> {this.props.error.summary}</p>}
                     <div className="field-line">
                         <TextField
@@ -65,6 +67,7 @@ export class SignUpForm extends React.Component<IPropsSingUp, any>{
                             errorText={this.props.error.fieldPassword}
                             name="password"
                             onChange={this.props.onChange}
+                            type="password"
                         />
                     </div>
                     <div className="field-line">
@@ -72,6 +75,7 @@ export class SignUpForm extends React.Component<IPropsSingUp, any>{
                             floatingLabelText="Confirm password"
                             errorText={this.props.error.fieldConfirm}
                             name="confirm"
+                            type="password"
                             onChange={this.props.onChange}
                         />
                     </div>

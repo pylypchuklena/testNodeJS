@@ -9,6 +9,7 @@ interface IPropsLogin {
     onChange: (e: any) => void;
     user: User;
     error: Errors;
+    successMsg:string;
 }
 export class LoginForm extends React.Component<IPropsLogin, any>{
     /**
@@ -24,6 +25,8 @@ export class LoginForm extends React.Component<IPropsLogin, any>{
             <Card className="container">
                 <form onSubmit={this.props.onSubmit} >
                     <h2 className='card-heading'>Login</h2>
+                    {this.props.successMsg && <p className="success-message">{this.props.successMsg}</p>}
+                    {this.props.error.summary && <p className="error-message">{this.props.error.summary}</p>}
                     <div className="field-line">
                         <TextField
                             floatingLabelText="Email"
