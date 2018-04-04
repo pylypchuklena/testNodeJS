@@ -86,8 +86,7 @@ router.post('/signup', (req, res, next) => {
                         email: 'This email is already taken.'
                     }
                 });
-            }
-
+            } 
             return res.status(400).json({
                 success: false,
                 message: 'Could not process the form.'
