@@ -1,90 +1,108 @@
 import * as React from 'react';
 import { LoginForm } from '../components/LoginForm';
-import { User, Errors } from '../components/SignUpForm';
+import { User, Errors, AppState } from '../types/userModel';
 import Auth from '../models/Auth';
 import { Redirect } from 'react-router';
+import { connect, Dispatch } from 'react-redux';
+import axios from 'axios';
+import * as action  from './../action'
+import { FormUser } from './SignUpPage';
 
-export class LoginPage extends React.Component<any, any>{
-    /**
-     *
-     */
-    constructor(props: any) {
-        super(props);
-        
-        this.state = {
-            user: new User(),
-            error: new Errors(),
-            successMsg: '',
-            isRedirect: false
-        }
-        
-        
-        this.onSubmitUser = this.onSubmitUser.bind(this);
-        this.onChangeFieldUser = this.onChangeFieldUser.bind(this);
-    }
-    componentDidMount(){
-        const storedMsg = localStorage.getItem('successMessage');
-
-        if(storedMsg){
-            this.setState({successMsg : storedMsg});
-            localStorage.removeItem('successMessage');
-        }
-    }
-    onSubmitUser(e: any) {
-        e.preventDefault();
-
-        const xhr = new XMLHttpRequest();
-        xhr.open('post', '/auth/login');
-        xhr.setRequestHeader('Content-type', 'application/json');
-        xhr.responseType = 'json';
-        xhr.addEventListener('load', () => {
-            if (xhr.status === 200) {
-                // save the token
-                Auth.authenticateUser(xhr.response.token);
-                this.setState({
-                    error: new Errors(),
-                    isRedirect: true
-                })
-            } else {
-                var error = new Errors();
-
-                if (xhr.response.errors) {
-                    error.fieldEmail = xhr.response.errors.email ? xhr.response.errors.email : '';
-                    error.fieldPassword = xhr.response.errors.password ? xhr.response.errors.password : '';
-                }
-                error.summary = xhr.response.message ? xhr.response.message : '';
-                //update state
-                this.setState({ error: error })
-
-            }
-        })
-        //create a string for http body msg JSON
-        xhr.send(JSON.stringify(this.state.user));
-    }
-
-    onChangeFieldUser(e: any) {
-        const field = e.target.name;
-        const user = this.state.user;
-        user[field] = e.target.value;
-        this.setState({
-            user
-        })
-    }
-
-
-    render() {
-        if(this.state.isRedirect)return(<Redirect to="/"/>)
-        return (
-            <div className="mainContainer__box">
-                <LoginForm onSubmit={this.onSubmitUser}
-                    onChange={this.onChangeFieldUser}
-                    error={this.state.error}
-                    user={this.state.user}
-                    successMsg={this.state.successMsg}
-                />
-            </div>
-
-        )
-    }
+interface IProps{
+  status: string;
+  logInUser:(user:User)=>void;
 }
-export default LoginPage;
+export class LoginPage extends React.Component<IProps, any>{
+  /**
+   *
+   */
+  constructor(props: IProps) {
+    super(props);
+
+    this.state = {
+      user: new FormUser(),
+      error: new Errors(),
+      successMsg: this.props.status,
+      isRedirect: false
+    }
+
+
+    this.onSubmitUser = this.onSubmitUser.bind(this);
+    this.onChangeFieldUser = this.onChangeFieldUser.bind(this);
+  }
+
+  onSubmitUser(e: any) {
+    e.preventDefault();
+
+    axios('/auth/login', {
+      method: 'post',
+      data: JSON.stringify(this.state.user),
+      headers: {
+        'Content-type': 'application/json'
+      }
+    })
+      .then((res) => {
+        if (res.status === 200) {
+         Auth.authenticateUser(res.data.token);
+        //  var loggedInUser = new User();
+        //  loggedInUser.name = res.data.user.name;
+        //  loggedInUser.email = res.data.user.email;
+        //  loggedInUser.id = res.data.user._id;
+        //  this.props.logInUser(loggedInUser);
+          this.setState({
+            error: new Errors(),
+            isRedirect: true
+          })
+        }
+      })
+      .catch((error) => {
+        if (error.response) {
+          var err = new Errors();
+          err.fieldEmail = error.response.data.errors.email ? error.response.data.errors.email : '';
+          err.fieldPassword = error.response.data.errors.password ? error.response.data.errors.password : '';
+          err.summary = error.response.data.message ? error.response.data.message : '';
+          //update state
+          this.setState({ error: err })
+        }
+      })
+  }
+
+  onChangeFieldUser(e: any) {
+    const field = e.target.name;
+    const user = this.state.user;
+    user[field] = e.target.value;
+    this.setState({
+      user
+    })
+  }
+
+
+  render() {
+    if (this.state.isRedirect) return (<Redirect to="/" />)
+    return (
+      <div className="mainContainer__box">
+        <LoginForm onSubmit={this.onSubmitUser}
+          onChange={this.onChangeFieldUser}
+          error={this.state.error}
+          successMsg={this.state.successMsg}
+        />
+      </div>
+
+    )
+  }
+}
+
+
+
+export function mapStateToProps(state: AppState) {
+  console.log(state)
+  return {
+    status: state.status
+  }
+}
+export function mapDispatchToProps(dispatch: Dispatch<any>) {
+  return {
+    logInUser: (user: User) => { dispatch(action.logInUser(user)) }
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);

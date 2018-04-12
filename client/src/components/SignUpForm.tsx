@@ -4,31 +4,15 @@ import TextField from 'material-ui/TextField';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Link } from 'react-router-dom';
+import { Errors } from '../types/userModel';
 
 interface IPropsSingUp {
     onSubmit: (e: any) => void;
     onChange: (e: any) => void;
-    user: User;
     error: Errors;
-    
 }
 
-export class User {
-    name: string;
-    password: string;
-    email: string;
-    confirm: string;
-    [k: string]: any;
-}
 
-export class Errors {
-    fieldName: string;
-    fieldPassword: string;
-    fieldEmail: string;
-    fieldConfirm: string;
-    summary: string;
-    [k: string]: any;
-}
 export class SignUpForm extends React.Component<IPropsSingUp, any>{
     /**
      *

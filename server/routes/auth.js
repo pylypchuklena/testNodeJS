@@ -16,15 +16,15 @@ function validateSignUpForm(payload) {
         isFormValid = false;
         errors.email = 'Plise provide a correct email address.';
     }
-    if (!payload || typeof payload.name !== 'string' || payload.name.trim() === 0) {
+    if (!payload || typeof payload.name !== 'string' || payload.name.trim().length === 0) {
         isFormValid = false;
         errors.name = 'Please provide your name.';
     }
-    if (!payload || typeof payload.password !== 'string' || payload.password.trim() < 8) {
+    if (!payload || typeof payload.password !== 'string' || payload.password.trim().length < 8) {
         isFormValid = false;
         errors.password = 'Password must have at least 8 characters.';
     }
-    if (!payload || typeof payload.confirm !== 'string' || typeof payload.password !== 'string' || payload.confirm.trim() !== payload.password.trim()) {
+    if (!payload || typeof payload.confirm !== 'string' || typeof payload.password !== 'string' || payload.confirm.trim().length !== payload.password.trim().length) {
         isFormValid = false;
         errors.confirm = 'Confirm password is not valid.';
     }
@@ -44,12 +44,12 @@ function validateLoginForm(payload) {
     const errors = {};
     let isFormValid = true;
     let message = '';
-
     if (!payload || typeof payload.email !== 'string' || !validator.isEmail(payload.email)) {
         isFormValid = false;
-        errors.email = 'Plise provide a correct email address.';
+        errors.email = 'Please provide a correct email address.';
     }
-    if (!payload || typeof payload.password !== 'string' || payload.password.trim() < 8) {
+  
+    if (!payload || typeof payload.password !== 'string' || payload.password.trim().length < 8) {
         isFormValid = false;
         errors.password = 'Password must have at least 8 characters.';
     }
@@ -99,8 +99,9 @@ router.post('/signup', (req, res, next) => {
     })(req, res, next);
 })
 
+
 router.post('/login', (req, res, next) => {
-    console.log(req.body)
+
     const validationResult = validateLoginForm(req.body);
 
     if (!validationResult.success) {

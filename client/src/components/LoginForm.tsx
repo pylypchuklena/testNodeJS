@@ -1,13 +1,12 @@
 import * as React from 'react';
 import { Card, CardText } from 'material-ui/Card';
 import { TextField, RaisedButton } from 'material-ui';
-import { User, Errors } from './SignUpForm';
+import { Errors } from '../types/userModel';
 import { Link } from 'react-router-dom';
 
 interface IPropsLogin {
     onSubmit: (e: any) => void;
     onChange: (e: any) => void;
-    user: User;
     error: Errors;
     successMsg:string;
 }
