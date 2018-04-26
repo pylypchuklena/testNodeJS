@@ -16,12 +16,13 @@ export class LoginForm extends React.Component<IPropsLogin, any>{
      */
     constructor(props: IPropsLogin) {
         super(props);
-
     }
+    
+    
     render() {
         return (
 
-            <Card className="container">
+            <Card className="container_box ">
                 <form onSubmit={this.props.onSubmit} >
                     <h2 className='card-heading'>Login</h2>
                     {this.props.successMsg && <p className="success-message">{this.props.successMsg}</p>}

@@ -5,14 +5,20 @@ import Auth from '../models/Auth';
 import { Redirect } from 'react-router';
 import { connect, Dispatch } from 'react-redux';
 import axios from 'axios';
-import * as action  from './../action'
+import * as action from './../action'
 import { FormUser } from './SignUpPage';
 
-interface IProps{
+interface IProps {
   status: string;
-  logInUser:(user:User)=>void;
+  logInUser: (user: User) => void;
 }
-export class LoginPage extends React.Component<IProps, any>{
+interface IState {
+  user: FormUser,
+  error: Errors,
+  successMsg: string,
+  isRedirect: boolean
+}
+class LoginPage extends React.Component<IProps, IState>{
   /**
    *
    */
@@ -26,7 +32,6 @@ export class LoginPage extends React.Component<IProps, any>{
       isRedirect: false
     }
 
-
     this.onSubmitUser = this.onSubmitUser.bind(this);
     this.onChangeFieldUser = this.onChangeFieldUser.bind(this);
   }
@@ -36,19 +41,18 @@ export class LoginPage extends React.Component<IProps, any>{
 
     axios('/auth/login', {
       method: 'post',
-      data: JSON.stringify(this.state.user),
+      data: JSON.stringify({
+        email: this.state.user.email,
+        password: this.state.user.password
+      }),
       headers: {
         'Content-type': 'application/json'
       }
     })
       .then((res) => {
         if (res.status === 200) {
-         Auth.authenticateUser(res.data.token);
-        //  var loggedInUser = new User();
-        //  loggedInUser.name = res.data.user.name;
-        //  loggedInUser.email = res.data.user.email;
-        //  loggedInUser.id = res.data.user._id;
-        //  this.props.logInUser(loggedInUser);
+          Auth.authenticateUser(res.data.token);
+          Auth.authUser(res.data.user.id);
           this.setState({
             error: new Errors(),
             isRedirect: true
@@ -57,6 +61,7 @@ export class LoginPage extends React.Component<IProps, any>{
       })
       .catch((error) => {
         if (error.response) {
+          console.log('login', error.response)
           var err = new Errors();
           err.fieldEmail = error.response.data.errors.email ? error.response.data.errors.email : '';
           err.fieldPassword = error.response.data.errors.password ? error.response.data.errors.password : '';
@@ -95,7 +100,6 @@ export class LoginPage extends React.Component<IProps, any>{
 
 
 export function mapStateToProps(state: AppState) {
-  console.log(state)
   return {
     status: state.status
   }

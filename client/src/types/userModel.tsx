@@ -1,8 +1,9 @@
 export class User {
   id:string;
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
-  token: string;
+  phone: string;
 }
 
 export class Errors {
@@ -15,7 +16,6 @@ export class Errors {
 }
 
 export class AppState{
-  isUser: boolean;
   status:string;
-  loggedInUser:User
+  users: User[];
 }

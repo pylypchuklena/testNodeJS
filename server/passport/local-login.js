@@ -9,41 +9,42 @@ module.exports = new PassportLocalStrategy({
   passwordField: 'password',
   session: false,
   passReqToCallback: true
-}, (req, email, password, done) => {
-  const userData = {
-    email: email.trim(),
-    password: password.trim()
-  };
+},
+  (req, email, password, done) => {
+    const userData = {
+      email: email.trim(),
+      password: password.trim()
+    };
 
-  //find user by email address
-  return User.findOne({
-    email: userData.email
-  }, (err, user) => {
+    //find user by email address
+    return User.findOne({
+      email: userData.email
+    }, (err, user) => {
 
-    if (err) { return done(err) }
+      if (err) { return done(err) }
 
-    if (!user) {
-      const error = new Error('Incorrect email or password');
-      error.name = 'IncorrectCredentialsError';
+      if (!user) {
+        const error = new Error('Incorrect email or password');
+        error.name = 'IncorrectCredentialsError';
 
-      return done(error);
-    }
-
-    return user.comparePassword(userData.password, (passwordErr, isMatch) => {
-      if (err) { return done(err); }
-      const payload = {
-        sub: user._id
+        return done(error);
       }
-      //create a token string
-      const token = jwt.sign(payload, config.jwtSecret);
-      const data = {
-        //there create respons form user for view(client)
-        name: user.name,
-        email: user.email,
-        id: user._id
-      }
-      return done(null, token, data);
-    })
-  });
+
+      return user.comparePassword(userData.password, (passwordErr, isMatch) => {
+        if (err) { return done(err); }
+        const payload = {
+          sub: user._id
+        }
+        //create a token string
+        const token = jwt.sign(payload, config.jwtSecret);
+        const data = {
+          //there create respons form user for view(client)
+          name: user.name,
+          email: user.email,
+          id: user._id
+        }
+        return done(null, token, data);
+      })
+    });
 })
 

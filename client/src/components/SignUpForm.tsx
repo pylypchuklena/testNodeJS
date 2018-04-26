@@ -24,7 +24,7 @@ export class SignUpForm extends React.Component<IPropsSingUp, any>{
     render() {
         return (
 
-            <Card className="container">
+            <Card className="container_box ">
 
                 <form onSubmit={this.props.onSubmit} >
                     <h2 className='card-heading'>Sign Up</h2>
@@ -34,7 +34,7 @@ export class SignUpForm extends React.Component<IPropsSingUp, any>{
                         <TextField
                             floatingLabelText="Name"
                             errorText={this.props.error.fieldName}
-                            name="name"
+                            name="firstName"
                             onChange={this.props.onChange} />
                     </div>
                     <div className="field-line">

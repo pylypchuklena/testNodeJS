@@ -9,17 +9,18 @@ import { Logout } from './components/Logout';
 
 import LoginPage from './containers/LoginPage';
 import SignUpPage from './containers/SignUpPage';
-import { DashboardPage } from './containers/DashboardPage';
+import DashboardPage  from './containers/DashboardPage';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 //redux
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
 import rootReducer from './redusers';
+import Profile from './components/Profile';
 
-const store = createStore(rootReducer)
-console.log(store.getState());
+const store = createStore(rootReducer, applyMiddleware(thunk))
 ReactDom.render(
   <Provider store={store}>
     <MuiThemeProvider>
@@ -27,6 +28,7 @@ ReactDom.render(
       <Router>
         <BaseLayout>
           <PrivateRoute exact path="/" component={DashboardPage} />
+          <PrivateRoute  path="/profile/:id" component={Profile} />
           <Route path="/login" component={LoginPage} />
           <Route path="/signup" component={SignUpPage} />
           <Route path="/logout" component={Logout} />

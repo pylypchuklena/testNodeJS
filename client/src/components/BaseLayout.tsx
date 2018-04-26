@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import UiButton from './simpleComponent/UiButton';
 import Header from './Header';
 import Footer  from './Footer';
 

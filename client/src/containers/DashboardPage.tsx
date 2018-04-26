@@ -1,50 +1,57 @@
 import * as React from 'react';
 import { Dashboard } from '../components/Dashboard';
-import axios from 'axios'
-import { AppState } from '../types/userModel';
-import { Dispatch, connect } from 'react-redux';
-import Auth from '../models/Auth';
+import { AppState, User } from '../types/userModel';
+import { connect, Dispatch } from 'react-redux';
+import { Card, CardTitle } from 'material-ui';
+import * as action from './../action';
 
-export class DashboardPage extends React.Component<{token:string}, any>{
-  /**
-   *
-   */
-  constructor(props: any) {
+interface IProps {
+  users: Array<User>;
+  loadUsers: () => void;
+  // selectedUser:(user:User)=>void;
+}
+
+class DashboardPage extends React.Component<IProps, any>{
+
+  constructor(props: IProps) {
     super(props);
-    this.state = {
-      secretData: ''
-    }
-  }
 
+  }
   componentDidMount() {
-    axios("/api/dashboard", {
-      method: 'get',
-      headers: {
-        'Content-type': 'application/json',
-        'Authorization': `bearer ${Auth.getToken()}`
-      }
-    })
-      .then((res) => {
-        if (res.status === 200) {
-          this.setState({
-            secretData: res.data.message
-          })
-        }
-      })
-      .catch(error => {
-        if (error.response) {
-          this.setState({
-            secretData: error.response.data.error
-          })
-        }
-      })
+    this.props.loadUsers()
   }
-
   render() {
-    return (
-      <Dashboard secretData={this.state.secretData} />
-    )
+    if (this.props.users) {
+      return (
+        <div className="mainContainer__box">
+          <Dashboard users={this.props.users}
+          // selectedUser={this.props.selectedUser}
+          />
+        </div>
+      )
+    } else {
+      return (
+        <div className="mainContainer__box">
+          <Card className="container_box  text-left mrg">
+            <CardTitle>There are no users yet</CardTitle>
+          </Card>
+        </div>
+      )
+    }
   }
 }
 
-export default (DashboardPage);
+export function mapStateToProps(state: AppState) {
+  return {
+    users: state.users
+  }
+}
+
+export function mapDispatchToProps(dispatch: Dispatch<any>) {
+  return {
+    loadUsers: () => { dispatch(action.getDataFromDB()) }
+    // selectedUser: (user:User) =>{dispatch(action.selectedUser(user))}
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DashboardPage);
