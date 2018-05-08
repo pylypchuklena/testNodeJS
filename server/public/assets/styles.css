@@ -130,6 +130,10 @@ a:hover {
   flex-basis: 200px;
   flex-grow: 1;
 }
+.col-2x{
+  padding: 10px;
+  width: 50%;
+}
 .page-header {
   background-position: 100% 15%;
   background-size: cover;
@@ -447,3 +451,7 @@ img.imgCover{
   right: -5px;
   top: -9px;
 }
+/* .wrapTable{
+  max-width: 600px;
+  width: 100%;
+} */

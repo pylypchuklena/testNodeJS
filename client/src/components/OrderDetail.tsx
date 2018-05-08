@@ -13,8 +13,7 @@ import Auth from '../models/Auth';
 
 interface IProps {
    order:Order;
-  // onConfirmOrder: (item: User) => void;
-
+   updateOrder: (item: Order) => void;
 }
 
 
@@ -30,35 +29,27 @@ class OrderDetail extends React.Component<IProps, any>{
   render() {
 
     return (
-
-      <div className="card_box">
-        <Card className="container_box  mrg">
       
+        <Card className="wrapTable  mrg">
             <CardTitle title="Profile" expandable={true} />
             <div className="flex-container">
-        
               <div className="wrapUserInfo">
-
                 <CardHeader title="Personal data" style={{ textAlign: 'left', padding: '5px', fontWeight: 'bold' }} />
                 <Divider />
                 <CardText style={{ padding: '5px' }} >
                   <div >
                   {this.props.order.orderDate}
                   </div>
-                 
                   <div className="button-line flex-end">
-
                     <div className="pddng">
                       <RaisedButton type="submit" label="Save changes" primary={true} />
                     </div>
                   </div>
                 </CardText>
               </div>
-
             </div>
         </Card>
-      </div>
-
+  
     )
   }
 

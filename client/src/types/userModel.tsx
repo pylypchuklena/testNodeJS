@@ -22,6 +22,7 @@ export class Order{
   orderId:string;
   dayOfOrder:string;
   isActive: boolean;
+  orderStatus:number;
 }
 export class Service{
   _id:string;

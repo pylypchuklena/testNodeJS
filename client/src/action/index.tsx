@@ -129,7 +129,6 @@ export function getOrdersFromDB(): any {
       }).then((res) => {
         if (res.status === 200) {
           var filteringOrders = res.data.orders;
-          console.log(filteringOrders, 'orders')
           var authUser = Auth.getAuthUser();
 
           if (authUser.role == 'user') {
@@ -142,6 +141,37 @@ export function getOrdersFromDB(): any {
         }
 
       })
+  }
+}
+
+export function updateOrderInDB(order:Order): any {
+  return (dispatch: any) => {
+    return axios({
+      method: 'put',
+      url: `/api/order/${order.orderId}`,
+      data: {
+        type: order.type,
+        isActive: order.isActive,
+        orderDate: order.orderDate,
+        orderStatus: order.orderStatus
+      },
+      headers: {
+        'Content-type': 'application/json',
+        'Authorization': `bearer ${Auth.getToken()}`
+      }
+    }).then((res) => {
+      if (res.status === 200) {
+        dispatch(updateOrder(res.data.order))
+      }
+    }
+    )
+  }
+}
+
+export function updateOrder(order:any):IAction{
+  return {
+    type: constants.UPDATE_ORDER,
+    value: order
   }
 }
 

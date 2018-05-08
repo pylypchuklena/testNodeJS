@@ -20,7 +20,6 @@ export class HomePage extends React.Component<any, any>{
     var user = Auth.getAuthUser();
     var optionButton;
     if (Auth.isUserAuthenticated()) {
-
       optionButton = <div className="options flex-center">
       <Link to="/user_dashboard" className="options__button">
         <RaisedButton
@@ -29,7 +28,6 @@ export class HomePage extends React.Component<any, any>{
           primary={true}
         />
       </Link>
-
         <Link to="/order" className="options__button">
           <RaisedButton
             label="Do order"
@@ -39,7 +37,6 @@ export class HomePage extends React.Component<any, any>{
           />
         </Link>
       </div>
-
     } else {
       optionButton = <h4><Link to="/login">Get login</Link></h4>
     }
@@ -47,7 +44,6 @@ export class HomePage extends React.Component<any, any>{
     return (
       <div className="home-page">
         <div className="page-header page-header--main header-filter clear-filter purple-filter bg">
-
         </div>
         <div className=" main main-raised">
           <div className="container_box profile">
@@ -69,9 +65,7 @@ export class HomePage extends React.Component<any, any>{
               </div>
             </div>
               {optionButton}
-
           </div>
-
           <div className="flex-center gallery">
             <ImageGrid />
           </div>

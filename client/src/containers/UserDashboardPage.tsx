@@ -8,6 +8,7 @@ import OrdersList from '../components/OrdersList';
 interface IProps {
   orders: Array<Order>;
   loadOrders: () => void;
+  updateOrder:(order:Order)=>void;
 }
 
 class UserDashboardPage extends React.Component<IProps, any>{
@@ -26,7 +27,7 @@ class UserDashboardPage extends React.Component<IProps, any>{
           <div className="page-header header-filter clear-filter purple-filter bg">
           </div>
           <div className=" main main-raised">
-            <OrdersList orders={this.props.orders}/>
+            <OrdersList orders={this.props.orders} updateOrder={this.props.updateOrder}/>
           </div>
         </div>
       )
@@ -56,7 +57,8 @@ export function mapStateToProps(state: AppState) {
 
 export function mapDispatchToProps(dispatch: Dispatch<any>) {
   return {
-    loadOrders: () => { dispatch(action.getOrdersFromDB()) }
+    loadOrders: () => { dispatch(action.getOrdersFromDB()) },
+    updateOrder:(order:Order) =>{dispatch(action.updateOrderInDB(order))}
   };
 }
 

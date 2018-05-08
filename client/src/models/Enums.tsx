@@ -5,3 +5,10 @@ export enum ServiceTypes{
   weddingheirStyle = 4,
   OurOfOffice = 5
 }
+
+export enum OrderStatus{
+  Pending=1,
+  Confirmed=2,
+  Done = 3,
+  Canceled =4
+}

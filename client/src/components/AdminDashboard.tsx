@@ -10,6 +10,7 @@ interface IDashboard {
   users: User[];
   orders: Order[];
   deleteUser: (user: User) => void;
+  updateOrder: (order: Order) => void;
 }
 
 export class AdminDashboard extends React.Component<IDashboard, any>{
@@ -30,6 +31,7 @@ export class AdminDashboard extends React.Component<IDashboard, any>{
     this.setState({
       buttonValue: '2'
     });
+    
   };
   handleChangeOrders(e: any) {
     this.setState({
@@ -37,9 +39,10 @@ export class AdminDashboard extends React.Component<IDashboard, any>{
     });
   };
   render() {
+    console.log(this.state.buttonValue);
     var modifiedСontent;
     if (this.state.buttonValue == '1') {
-      modifiedСontent = <OrdersList orders={this.props.orders} />
+      modifiedСontent = <OrdersList orders={this.props.orders} updateOrder={this.props.updateOrder} />
     }
     if (this.state.buttonValue == '2') {
       modifiedСontent = <UsersList users={this.props.users} onDeleteUser={this.props.deleteUser} />
@@ -57,18 +60,16 @@ export class AdminDashboard extends React.Component<IDashboard, any>{
               label="Subscribers"
               primary={(this.state.buttonValue == '2') ? true : false}
               onClick={this.handleChangeSubscr} />
-
           </ToolbarGroup>
         </Toolbar>
         <div>
           {modifiedСontent}
         </div>
-
       </div>
-
-
     )
   }
 }
+
+
 export default AdminDashboard;
 

@@ -61,8 +61,8 @@ router.put('/order/:id', (req, res, next) => {
   console.log(req.body);
   console.log('responce', res.body)
   var updatedOrder = req.body;
-  Order.findByIdAndUpdate({ _id: req.params.verifiedUser._id }, req.body).then((order) => {
-    Order.findOne({ _id: req.params.verifiedUser._id }).then((order) => {
+  Order.findByIdAndUpdate({ _id: req.params.id }, req.body).then((order) => {
+    Order.findOne({ _id: req.params.id }).then((order) => {
       console.log('find one ', order)
       res.status(200).json({
         success: true,

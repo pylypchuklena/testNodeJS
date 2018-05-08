@@ -11,6 +11,7 @@ interface IProps {
   loadUsers: () => void;
   loadOrders: () => void;
   deleteUser:(user:User) =>void;
+  updateOrder: (order:Order) =>void;
 }
 
 class DashboardPage extends React.Component<IProps, any>{
@@ -34,6 +35,7 @@ class DashboardPage extends React.Component<IProps, any>{
               users={this.props.users}
               orders={this.props.orders}
               deleteUser={this.props.deleteUser}
+              updateOrder = {this.props.updateOrder}
             />
           </div>
         </div>
@@ -56,7 +58,6 @@ class DashboardPage extends React.Component<IProps, any>{
   }
 }
 
-// export default DashboardPage;
 export function mapStateToProps(state: AppState) {
   return {
     orders: state.orders,
@@ -68,6 +69,7 @@ export function mapDispatchToProps(dispatch: Dispatch<any>) {
   return {
     loadOrders: () => { dispatch(action.getOrdersFromDB()) },
     loadUsers: () => { dispatch(action.getUsersFromDB()) },
+    updateOrder: (order:Order) => { dispatch(action.updateOrderInDB(order)) },
     deleteUser: (user:User) => { dispatch(action.deleteUserFromDB(user)) }
   };
 }

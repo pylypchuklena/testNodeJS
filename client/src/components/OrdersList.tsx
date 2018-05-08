@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom';
 import OrderDetail from './OrderDetail';
 interface IProps {
   orders: Array<Order>;
+  updateOrder: (order: Order) => void;
 }
 
 class OrdersList extends React.Component<IProps, any>{
@@ -23,12 +24,12 @@ class OrdersList extends React.Component<IProps, any>{
       isAdmin: false,
       tableHeader: [],
       orders: Array<OrderItemViewModel>(),
-      selectedItem:null
+      selectedItem: null
     }
   }
 
   componentWillReceiveProps() {
-    this.setState({ orders: this.props.orders.map(x => { return new OrderItemViewModel(false,x)}) })
+    this.setState({ orders: this.props.orders.map(x => { return new OrderItemViewModel(false, x) }) })
   }
 
   componentDidMount() {
@@ -45,28 +46,26 @@ class OrdersList extends React.Component<IProps, any>{
   }
 
   onRowSelect(e: any) {
-    var orders = this.state.orders.map((x:OrderItemViewModel,index:number)=>{
-      if(index == e)
-      {
-        x.selected=true;
+    var orders = this.state.orders.map((x: OrderItemViewModel, index: number) => {
+      if (index == e) {
+        x.selected = true;
         return x;
       }
       x.selected = false;
       return x;
     });
-    this.setState({ orders: orders , selectedItem:orders[e]});
+    this.setState({ orders: orders, selectedItem: orders[e] });
   }
   render() {
     var bodyListOrder;
     var headerListOrder;
-    console.log(this.state.selectedItem);
     headerListOrder = this.state.tableHeader.map((item: string, index: string) => {
       return <TableHeaderColumn key={index}>{item}</TableHeaderColumn>
     })
     if (this.props.orders) {
       bodyListOrder = this.state.orders.map((item: OrderItemViewModel) => {
-       var dayOfOrder = new Date(item.model.dayOfOrder).toLocaleString();
-       var orderOnDay = new Date(item.model.orderDate).toLocaleString();
+        var dayOfOrder = new Date(item.model.dayOfOrder).toLocaleString();
+        var orderOnDay = new Date(item.model.orderDate).toLocaleString();
         var typeOrder = '';
         for (var i = 0; i < item.model.type.length; i++) {
           typeOrder += item.model.type[i] + ', '
@@ -112,9 +111,9 @@ class OrdersList extends React.Component<IProps, any>{
     //   </div>
     // }
     return (
-      <>
-        <div className="card_box">
-          <Card className="container_box text-left mrg">
+      <div className="flex-between">
+        <div className="col-2x">
+          <Card className=" text-left mrg">
             <CardTitle>Orders list :</CardTitle>
             <Divider />
             <div className="wrapList">
@@ -133,14 +132,13 @@ class OrdersList extends React.Component<IProps, any>{
             </div>
           </Card>
         </div>
-        {this.state.selectedItem ? <OrderDetail order={this.state.selectedItem.model}/> : <></>}
-      </>
+        <div className="col-2x">
+          {(this.state.selectedItem) ? <OrderDetail order={this.state.selectedItem.model} updateOrder={this.props.updateOrder} /> : <Card className="mrg"><CardTitle>Select order from list</CardTitle></Card>}
+        </div>
+      </div>
     )
-
   }
-
 }
-
 
 class OrderItemViewModel {
   selected: boolean;

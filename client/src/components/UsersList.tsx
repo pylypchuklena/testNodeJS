@@ -43,9 +43,7 @@ export class UsersList extends React.Component<IDashboard, IState>{
 
   render() {
     var listItem;
-
     if (this.props.users)
-
       listItem = this.props.users.map((user) => {
         if (user.role == "user")
           return (<ListItem key={user.id}
@@ -53,7 +51,6 @@ export class UsersList extends React.Component<IDashboard, IState>{
             secondaryText={user.email}
             leftAvatar={<Avatar icon={<ActionFace />} />}
             rightIcon={<Off hoverColor={blue500} onClick={(e) => { this.handleDelete }} />}
-
           />
           )
       })

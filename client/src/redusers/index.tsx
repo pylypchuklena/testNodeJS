@@ -49,6 +49,8 @@ function orderReduser(state: Order[] = [], action: IAction): Order[] {
   switch (action.type) {
     case constants.GET_ALL_ORDERS:
       return action.value;
+      case constants.UPDATE_ORDER:
+return updateOrder(state,action.value);
     default: {
       return state
     }
@@ -63,6 +65,14 @@ function serviceReduser(state: Service[] = [], action: IAction): Service[] {
       return state
     }
   }
+}
+
+function updateOrder(state: Order[],order:Order):Order[]{
+  return state.map(item=>{
+    if(item.orderId == order.orderId)
+     return order;
+    return item;
+  })
 }
 
 export const rootReducer = combineReducers<AppState>({
