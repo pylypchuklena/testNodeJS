@@ -53,8 +53,9 @@ app.use('/api', authCheckMiddleware);
 //routes
 const authRoutes = require('./server/routes/auth');
 app.use('/auth', authRoutes);
-const apiRoutes = require('./server/routes/api');
-app.use('/api', apiRoutes);
+
+var apiRoutesSetup = require('./server/routes/api/api');
+apiRoutesSetup(app);
 
 app.get('*', function(req,res){
     res.render('index');

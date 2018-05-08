@@ -14,5 +14,7 @@ module.exports.connect = (uri)=>{
 
     //load models
     require('./user');
+    require('./order')
+    require('./service')
 
 }

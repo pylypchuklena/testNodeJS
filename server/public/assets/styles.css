@@ -13,6 +13,9 @@ body {
   width: 100%;
   text-align: center;
 }
+.dashboard-page .container_box{
+  max-width: calc(100% - 40%);
+}
 .container{
   max-width: 1800px;
   margin: 0 auto;
@@ -27,7 +30,8 @@ body {
   transition: color 0.4s;
 }
 .authorize_box{
-  background-color: rgba(0, 188, 212, 0.22);
+  background-color: rgba(126, 126, 126, 0.22);
+  position: relative;
 }
 
 ul {
@@ -104,6 +108,14 @@ a:hover {
   justify-content: flex-end;
   flex-grow: 1;
 }
+.flex-between{
+  display: flex;
+  justify-content: space-between;
+}
+.flex-around{
+  display: flex;
+  justify-content: space-around;
+}
 .flex-align-center{
   display: flex;
   flex-direction: row;
@@ -119,7 +131,6 @@ a:hover {
   flex-grow: 1;
 }
 .page-header {
-  height: 100vh;
   background-position: 100% 15%;
   background-size: cover;
   margin: 0;
@@ -127,9 +138,22 @@ a:hover {
   border: 0;
   display: flex;
   align-items: center;
+  overflow: hidden;
+  height: 30vh;
 }
-
-.bg{
+.page-header--main {
+  height: 50vh;
+}
+.home-page .bg{
+  background-image: url(./img/bg.jpg);
+}
+.auth-page .bg{
+  background-image: url(./img/bg3.jpg);
+}
+.dashboard-page .bg{
+  background-image: url(./img/img8.jpg);
+}
+.profile-page .bg{
   background-image: url(./img/bg.jpg);
 }
 .header-filter {
@@ -148,10 +172,7 @@ a:hover {
 .header-filter:before {
   background: rgba(0, 0, 0, .5);
 }
-.page-header {
-  height: 50vh;
-  overflow: hidden;
-}
+
 .bg:before{
   position: absolute;
   z-index: 1;
@@ -180,7 +201,6 @@ a:hover {
 .navbar {
   border: 0;
   border-radius: 3px;
-  padding: .625rem 0;
   margin-bottom: 20px;
   color: #555;
   background-color: #fff !important;
@@ -214,7 +234,7 @@ a:hover {
   display: flex;
   min-height: calc(100% - 140px);
 }
-nav a {
+nav .link {
   display: block;
   padding: 20px;
 }
@@ -236,6 +256,12 @@ nav a {
 .icon-favorite{
   margin-left: 5px;
 }
+.icon-notification{
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 30px;
+}
 img {
   max-width: 100%;
   vertical-align: middle;
@@ -253,12 +279,21 @@ img {
   margin: 1.071rem auto 0;
   max-width: 600px;
 }
+.description .icon{
+  height: inherit;
+  width: inherit;
+  font-size: 24px;
+}
 .profile img{
   max-width: 160px;
   width: 100%;
   margin: 0 auto;
   -webkit-transform: translate3d(0, -50%, 0);
   transform: translate3d(0, -50%, 0);
+}
+.profile .options__button{
+  padding: 0 10px;
+  display: block;
 }
 .rounded-circle {
   border-radius: 50% !important;
@@ -382,3 +417,33 @@ img.imgCover{
   fill: #1976d2 !important;
 }
 
+.wrapRadioBtn{
+  max-width: 256px;
+  margin: 0 auto;
+}
+.card_box{
+  padding: 50px 5px;
+}
+.isActive{
+  background-color: rgba(20, 170, 189, 0.10980392156862745) !important;
+  border-bottom: 1px solid #fff !important;
+}
+.wrapIconWithNumb{
+  position: relative;
+  display: block;
+}
+.wrapIconWithNumb span{
+  position: absolute;
+  height: 14px;
+  width: 14px;
+  display: block;
+  font-size: 9px;
+  background-color: rgb(255, 64, 129);
+  text-align: center;
+  border: 1px solid rgb(255, 64, 129);
+  color: #fff;
+  border-radius: 50%;
+  line-height: 14px;
+  right: -5px;
+  top: -9px;
+}

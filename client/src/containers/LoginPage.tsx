@@ -16,7 +16,7 @@ interface IState {
   user: FormUser,
   error: Errors,
   successMsg: string,
-  isRedirect: boolean
+  redirectPath: string
 }
 class LoginPage extends React.Component<IProps, IState>{
   /**
@@ -29,7 +29,7 @@ class LoginPage extends React.Component<IProps, IState>{
       user: new FormUser(),
       error: new Errors(),
       successMsg: this.props.status,
-      isRedirect: false
+      redirectPath: ""
     }
 
     this.onSubmitUser = this.onSubmitUser.bind(this);
@@ -52,10 +52,11 @@ class LoginPage extends React.Component<IProps, IState>{
       .then((res) => {
         if (res.status === 200) {
           Auth.authenticateUser(res.data.token);
-          Auth.authUser(res.data.user.id);
+          Auth.authUser(res.data.user);
+          var path = Auth.getAuthUser().role == "admin"?"/dashboard":"/";
           this.setState({
             error: new Errors(),
-            isRedirect: true
+            redirectPath: path
           })
         }
       })
@@ -83,14 +84,18 @@ class LoginPage extends React.Component<IProps, IState>{
 
 
   render() {
-    if (this.state.isRedirect) return (<Redirect to="/" />)
+    if (this.state.redirectPath) return (<Redirect to={this.state.redirectPath} />)
     return (
-      <div className="mainContainer__box">
-        <LoginForm onSubmit={this.onSubmitUser}
-          onChange={this.onChangeFieldUser}
-          error={this.state.error}
-          successMsg={this.state.successMsg}
-        />
+      <div className="auth-page">
+        <div className="page-header header-filter clear-filter purple-filter bg">
+        </div>
+        <div className=" main main-raised">
+          <LoginForm onSubmit={this.onSubmitUser}
+            onChange={this.onChangeFieldUser}
+            error={this.state.error}
+            successMsg={this.state.successMsg}
+          />
+        </div>
       </div>
 
     )

@@ -1,32 +1,22 @@
-import { AppState, User } from "../types/userModel";
+import { AppState, User, Order, Service } from "../types/userModel";
 import { IAction } from "../action";
 import * as constants from '../constants';
 import { combineReducers } from "redux";
 import Auth from "../models/Auth";
 
 
-// function selectedUser(users: User[], item: User): User[] {
-//   return users.map(user => {
-//     if (user.id != item.id) {
-//       if (user.isSelected)
-//         return { ...user, isSelected: false } as User;
-//       return user;
-//     }
-//     return { ...user, isSelected: true } as User;
-//   })
-// }
 
-function updateUser(users: User[], item: User): User[]{
-  return users.map(user=>{
-    if(user.id == item.id){
+function updateUser(users: User[], item: User): User[] {
+  return users.map(user => {
+    if (user.id == item.id) {
       return item;
     }
     return user;
   })
 }
 
-function deleteUser(users: User[], item: User): User[]{
-  return users.filter(user=>{ return user.id != item.id })
+function deleteUser(users: User[], item: User): User[] {
+  return users.filter(user => { return user.id != item.id })
 }
 
 const initialState = new AppState()
@@ -40,11 +30,6 @@ function statusReducer(state: string, action: any): string {
   }
 }
 
-function getAllUsers(users: User[], item: any): User[]{
-
-  var itemId = Auth.getAuthUser();  ///figna
-  return users.filter(user=>{ return user.id != itemId })
-}
 
 function userReduser(state: User[] = [], action: IAction): User[] {
   switch (action.type) {
@@ -60,9 +45,31 @@ function userReduser(state: User[] = [], action: IAction): User[] {
   }
 }
 
+function orderReduser(state: Order[] = [], action: IAction): Order[] {
+  switch (action.type) {
+    case constants.GET_ALL_ORDERS:
+      return action.value;
+    default: {
+      return state
+    }
+  }
+}
+
+function serviceReduser(state: Service[] = [], action: IAction): Service[] {
+  switch (action.type) {
+    case constants.GET_ALL_SERVICES:
+      return action.value;
+    default: {
+      return state
+    }
+  }
+}
+
 export const rootReducer = combineReducers<AppState>({
   status: statusReducer,
-  users: userReduser
+  users: userReduser,
+  orders: orderReduser,
+  services:serviceReduser
 })
 
 export default rootReducer;

@@ -9,6 +9,7 @@ import { Redirect } from 'react-router';
 import Divider from 'material-ui/Divider';
 import InputMask from 'react-input-mask';
 import { FormUser } from '../containers/SignUpPage';
+import Auth from '../models/Auth';
 
 interface IProps {
   user: User;
@@ -21,6 +22,7 @@ interface IState {
   url: string,
   user: FormUser;
   isRedirect: boolean;
+  redirectPath: string;
 }
 
 class Profile extends React.Component<IProps, IState>{
@@ -33,11 +35,13 @@ class Profile extends React.Component<IProps, IState>{
     this.state = {
       url: '',
       user: formUser,
-      isRedirect: false
+      isRedirect: false,
+      redirectPath:''
     }
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.onChangeField = this.onChangeField.bind(this);
+    this.checkUser= this.checkUser.bind(this);
   }
 
   onChangeField(e: any) {
@@ -46,100 +50,117 @@ class Profile extends React.Component<IProps, IState>{
     user[field] = e.target.value;
     this.setState({ user });
   }
-
+  checkUser(){
+    var path = Auth.getAuthUser().role == "admin"?"/dashboard":"/";
+    this.setState({
+      redirectPath: path,
+      isRedirect: true
+    })
+  }
   handleDelete(e: any) {
     e.preventDefault();
-    this.props.onDeleteUser(this.state.user);
-    this.setState({ isRedirect: true })
+    this.props.onDeleteUser(this.state.user.user);
+    this.checkUser()
   }
-
+  
   handleSubmit(e: any) {
     e.preventDefault();
     var user = this.state.user.user;
-    this.props.onUpdateUser(this.state.user);
-    this.setState({ isRedirect: true })
+    this.props.onUpdateUser(this.state.user.user);
+    this.checkUser();
   }
 
   render() {
-    if (this.state.isRedirect) return (<Redirect to="/" />)
+    if (this.state.isRedirect) return (<Redirect to={this.state.redirectPath}/>)
     var image = this.state.url;
     if (image.length == 0) {
       image = '/assets/user.png';
     }
+    var btnDelete;
 
+    if (Auth.getAuthUser().role != 'admin') {
+       btnDelete = <div className="pddng">
+        <RaisedButton onClick={this.handleDelete} label="Delete User" secondary={true} />
+      </div>
+    }
     if (this.props.user) {
       return (
-        <div className="mainContainer__box">
-          <Card className="container_box  mrg">
-            <form onSubmit={this.handleSubmit}>
-              <CardTitle title="Profile" expandable={true} />
-              <div className="flex-container">
-                <div className="wrapUserImg">
-                  <img className='imgContCover' src={image} alt="img" />
-                </div>
-                <div className="wrapUserInfo">
+        <div className="profile-page">
+          <div className="page-header header-filter clear-filter purple-filter bg">
+          </div>
+          <div className=" main main-raised">
+            <div className="card_box">
+              <Card className="container_box  mrg">
+                <form onSubmit={this.handleSubmit}>
+                  <CardTitle title="Profile" expandable={true} />
+                  <div className="flex-container">
+                    <div className="wrapUserImg">
+                      <img className='imgContCover' src={image} alt="img" />
+                    </div>
+                    <div className="wrapUserInfo">
 
-                  <CardHeader title="Personal data" style={{ textAlign: 'left', padding: '5px', fontWeight: 'bold' }} />
-                  <Divider />
-                  <CardText style={{ padding: '5px' }} >
-                    <div >
-                      <TextField
-                        name="firstName"
-                        floatingLabelFixed={true}
-                        floatingLabelText="First Name"
-                        value={(this.state.user.firstName) ? this.state.user.firstName : ''}
-                        onChange={this.onChangeField}
-                      />
-                    </div>
-                    <div >
-                      <TextField
+                      <CardHeader title="Personal data" style={{ textAlign: 'left', padding: '5px', fontWeight: 'bold' }} />
+                      <Divider />
+                      <CardText style={{ padding: '5px' }} >
+                        <div >
+                          <TextField
+                            name="firstName"
+                            floatingLabelFixed={true}
+                            floatingLabelText="First Name"
+                            value={(this.state.user.firstName) ? this.state.user.firstName : ''}
+                            onChange={this.onChangeField}
+                          />
+                        </div>
+                        <div >
+                          <TextField
 
-                        name="lastName"
-                        floatingLabelFixed={true}
-                        floatingLabelText="Last Name"
-                        value={(this.state.user.lastName ? this.state.user.lastName : '')}
-                        onChange={this.onChangeField}
-                      />
-                    </div>
-                    <div >
-                      <TextField
-                        name="email"
-                        type="email"
-                        required
-                        floatingLabelFixed={true}
-                        floatingLabelText="Email"
-                        value={(this.state.user.email) ? this.state.user.email : ''}
-                        onChange={this.onChangeField}
-                      />
-                    </div>
-                    <div >
-                      <TextField
-                        floatingLabelFixed={true}
-                        floatingLabelText="Phone">
-                        <InputMask mask="+(099) 999 99 99"
-                          name="phone"
-                          onChange={this.onChangeField}
-                          value={(this.state.user.phone) ? this.state.user.phone : ''} />
-                      </TextField>
-                    </div>
-                    <div className="button-line flex-end">
-                      <div className="pddng">
-                        <RaisedButton onClick={this.handleDelete} label="Delete User" secondary={true} />
-                      </div>
-                      <div className="pddng">
-                        <RaisedButton type="submit" label="Save changes" primary={true} />
-                      </div>
-                    </div>
-                  </CardText>
-                </div>
+                            name="lastName"
+                            floatingLabelFixed={true}
+                            floatingLabelText="Last Name"
+                            value={(this.state.user.lastName ? this.state.user.lastName : '')}
+                            onChange={this.onChangeField}
+                          />
+                        </div>
+                        <div >
+                          <TextField
+                            name="email"
+                            type="email"
+                            required
+                            floatingLabelFixed={true}
+                            floatingLabelText="Email"
+                            value={(this.state.user.email) ? this.state.user.email : ''}
+                            onChange={this.onChangeField}
+                          />
+                        </div>
+                        <div >
+                          <TextField
+                            floatingLabelFixed={true}
+                            floatingLabelText="Phone">
+                            <InputMask mask="+(099) 999 99 99"
+                              name="phone"
+                              onChange={this.onChangeField}
+                              value={(this.state.user.phone) ? this.state.user.phone : ''} />
+                          </TextField>
+                        </div>
+                        <div className="button-line flex-end">
 
-              </div>
-            </form>
-          </Card>
+                          {btnDelete}
+                          <div className="pddng">
+                            <RaisedButton type="submit" label="Save changes" primary={true} />
+                          </div>
+                        </div>
+                      </CardText>
+                    </div>
+
+                  </div>
+                </form>
+              </Card>
+            </div>
+          </div>
         </div>
       )
     }
-    else return (<div>not found</div>)
+    else return (<div> not found</div >)
   }
 
 }

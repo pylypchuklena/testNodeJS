@@ -13,6 +13,7 @@ export class Logout extends React.Component<any, any>{
   }
   componentWillMount() {
     Auth.deauthenticateUser();
+    Auth.deleteAuthUser();
   }
   render() {
     return (

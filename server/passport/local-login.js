@@ -39,9 +39,11 @@ module.exports = new PassportLocalStrategy({
         const token = jwt.sign(payload, config.jwtSecret);
         const data = {
           //there create respons form user for view(client)
-          name: user.name,
+          firstName: user.firstName,
+          lastName: user.lastName,
           email: user.email,
-          id: user._id
+          id: user._id,
+          role: user.role
         }
         return done(null, token, data);
       })

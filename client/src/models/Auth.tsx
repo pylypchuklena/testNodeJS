@@ -1,38 +1,40 @@
+import { User } from '../types/userModel';
 class Auth {
-    static authenticateUser(token: string) {
-        localStorage.setItem("token", token)
+  static authenticateUser(token: string) {
+    localStorage.setItem("token", token)
 
-    }
-    static authUser(user: string) {
-      localStorage.setItem("user", user)
   }
-  
-    static isUserAuthenticated() {
-        return localStorage.getItem('token') !== null;
-    }
+  static authUser(user: any) {
+    localStorage.setItem("user", JSON.stringify(user))
+  }
 
-    /**
-     * Deauthenticate a user. Remove a token from Local Storage.
-     *
-     */
-    static deauthenticateUser() {
-        localStorage.removeItem('token');
-    }
-    static deleteAuthUser(){
-      localStorage.removeItem('user');
-    }
+  static isUserAuthenticated() {
+    return localStorage.getItem('token') !== null;
+  }
 
-    /**
-     * Get a token value.
-     *
-     * @returns {string}
-     */
+  /**
+   * Deauthenticate a user. Remove a token from Local Storage.
+   *
+   */
+  static deauthenticateUser() {
+    localStorage.removeItem('token');
+  }
+  static deleteAuthUser() {
+    localStorage.removeItem('user');
+  }
 
-    static getToken() {
-        return localStorage.getItem('token');
-    }
-    static getAuthUser(){
-      return localStorage.getItem('user')
-    }
+  /**
+   * Get a token value.
+   *
+   * @returns {string}
+   */
+
+  static getToken() {
+    return localStorage.getItem('token');
+  }
+  static getAuthUser() {
+    var obj = localStorage.getItem('user');
+    return ((JSON.parse(obj)) as User)
+  }
 }
 export default Auth;

@@ -11,6 +11,7 @@ function mapUser(item) {
     mappedUser.lastName = item.lastName && item.lastName;
     mappedUser.email = item.email && item.email;
     mappedUser.phone = item.phone && item.phone;
+    mappedUser.role = item.role && item.role;
   }
   return mappedUser;
 }

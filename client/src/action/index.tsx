@@ -1,5 +1,5 @@
 import * as constants from '../constants';
-import { User, AppState } from '../types/userModel';
+import { User, AppState, Order, Service } from '../types/userModel';
 import axios from 'axios';
 import Auth from '../models/Auth';
 
@@ -14,13 +14,6 @@ export function addUser(item: User): IAction {
     value: item
   }
 }
-// export function toggleButton(isUser: boolean): IAction {
-
-//   return {
-//     type: constants.TOGGLE_USER,
-//     value: isUser
-//   }
-// }
 export function signUpStatus(status: string): IAction {
   return {
     type: constants.SHOW_STATUS,
@@ -43,7 +36,7 @@ export function logOutUser(): IAction {
     value: null
   }
 }
-export function getDataFromDB(): any {
+export function getUsersFromDB(): any {
   return (dispatch: any) => {
     return axios.get('/api/dashboard',
       {
@@ -54,27 +47,22 @@ export function getDataFromDB(): any {
       }).then((res) => {
         if (res.status === 200) {
           dispatch(getAllUser(res.data.users))
+          
         }
       })
   }
 }
 
 export function getAllUser(items: any): IAction {
-  
+
   return {
     type: constants.GET_ALL_USER,
     value: items
   }
 }
-// export function selectedUser(item: User): IAction {
-//   return {
-//     type: constants.SELECTED_USER,
-//     value: item
-//   }
-// }
+
 
 export function updateDataUser(user: User): any {
-  console.log('action user',user)
   return (dispatch: any) => {
     return axios({
       method: 'put',
@@ -90,7 +78,6 @@ export function updateDataUser(user: User): any {
         'Authorization': `bearer ${Auth.getToken()}`
       }
     }).then((res) => {
-      console.log(res)
       if (res.status === 200) {
         dispatch(updateUser(res.data.user))
       }
@@ -129,5 +116,69 @@ export function deleteUser(user: User): IAction {
   return {
     type: constants.DELETE_USER,
     value: user
+  }
+}
+export function getOrdersFromDB(): any {
+  return (dispatch: any) => {
+    return axios.get('/api/order',
+      {
+        headers: {
+          'Content-type': 'application/json',
+          'Authorization': `bearer ${Auth.getToken()}`
+        }
+      }).then((res) => {
+        if (res.status === 200) {
+          var filteringOrders = res.data.orders;
+          console.log(filteringOrders, 'orders')
+          var authUser = Auth.getAuthUser();
+
+          if (authUser.role == 'user') {
+            filteringOrders = res.data.orders.filter((order: Order) => {
+              return authUser.id == order.userId
+            })
+          }
+
+          dispatch(getAllOrders(filteringOrders))
+        }
+
+      })
+  }
+}
+
+export function getAllOrders(orders: Order[]): IAction {
+  return {
+    type: constants.GET_ALL_ORDERS,
+    value: orders
+  }
+}
+
+export function getServicesFromDB(): any {
+  return (dispatch: any) => {
+    return axios.get('/api/service',
+      {
+        headers: {
+          'Content-type': 'application/json',
+          'Authorization': `bearer ${Auth.getToken()}`
+        }
+      }).then((res) => {
+        if (res.status === 200) {
+          
+          dispatch(getAllServices(res.data.services))
+        }
+      })
+  }
+}
+
+export function getAllServices(services: Service[]): IAction {
+  return {
+    type: constants.GET_ALL_SERVICES,
+    value: services
+  }
+}
+
+export function addService():IAction{
+  return {
+    type: constants.ADD_SERVICES,
+    value: {}
   }
 }

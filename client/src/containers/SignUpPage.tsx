@@ -11,10 +11,10 @@ interface IStatus {
   signUpStatus: (status: string) => void;
 }
 
-interface IState{
-  user:FormUser,
-  error:Errors,
-  isRedirect:boolean
+interface IState {
+  user: FormUser,
+  error: Errors,
+  isRedirect: boolean
 }
 
 export class FormUser {
@@ -32,28 +32,28 @@ export class FormUser {
   }
 
   get firstName(): string {
-      return this.userModel.firstName;
+    return this.userModel.firstName;
   }
   set firstName(value: string) {
     this.userModel.firstName = value;
   }
 
   get phone(): string {
-      return this.userModel.phone;
+    return this.userModel.phone;
   }
   set phone(value: string) {
     this.userModel.phone = value;
   }
 
   get lastName(): string {
-      return this.userModel.lastName;
+    return this.userModel.lastName;
   }
   set lastName(value: string) {
     this.userModel.lastName = value;
   }
 
   get email(): string {
-      return this.userModel.email;
+    return this.userModel.email;
   }
   set email(value: string) {
     this.userModel.email = value;
@@ -68,7 +68,7 @@ export class FormUser {
 
 }
 
-export class SignUpPage extends React.Component<IStatus,IState>{
+export class SignUpPage extends React.Component<IStatus, IState>{
   /**
    *
    */
@@ -90,11 +90,11 @@ export class SignUpPage extends React.Component<IStatus,IState>{
       method: 'post',
       data: JSON.stringify(
         {
-          	firstName: this.state.user.firstName, 
-          	email: this.state.user.email,
-            password: this.state.user.password,
-            confirm: this.state.user.confirm
-          }
+          firstName: this.state.user.firstName,
+          email: this.state.user.email,
+          password: this.state.user.password,
+          confirm: this.state.user.confirm
+        }
       ),
       headers: {
         'Content-type': 'application/json'
@@ -138,11 +138,15 @@ export class SignUpPage extends React.Component<IStatus,IState>{
   render() {
     if (this.state.isRedirect) return (<Redirect to='/login' />)
     return (
-      <div className="mainContainer__box">
-        <SignUpForm onSubmit={this.onSubmitForm}
-          error={this.state.error}
-          onChange={this.onChangeField}
-        />
+      <div className="auth-page">
+        <div className="page-header header-filter clear-filter purple-filter bg">
+        </div>
+        <div className=" main main-raised">
+          <SignUpForm onSubmit={this.onSubmitForm}
+            error={this.state.error}
+            onChange={this.onChangeField}
+          />
+        </div>
       </div>
     )
   }

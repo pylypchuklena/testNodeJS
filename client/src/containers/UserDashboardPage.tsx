@@ -1,40 +1,32 @@
 import * as React from 'react';
-import { AdminDashboard } from '../components/AdminDashboard';
-import { AppState, User, Order } from '../types/userModel';
+import { AppState, Order } from '../types/userModel';
 import { connect, Dispatch } from 'react-redux';
 import { Card, CardTitle } from 'material-ui';
 import * as action from './../action';
+import OrdersList from '../components/OrdersList';
 
 interface IProps {
-  users: Array<User>;
   orders: Array<Order>;
-  loadUsers: () => void;
   loadOrders: () => void;
-  deleteUser:(user:User) =>void;
 }
 
-class DashboardPage extends React.Component<IProps, any>{
+class UserDashboardPage extends React.Component<IProps, any>{
 
   constructor(props: IProps) {
     super(props);
+
   }
   componentDidMount() {
-    this.props.loadUsers(),
     this.props.loadOrders()
   }
-
   render() {
-    if (this.props.users) {
+    if (this.props.orders) {
       return (
         <div className="dashboard-page">
           <div className="page-header header-filter clear-filter purple-filter bg">
           </div>
           <div className=" main main-raised">
-            <AdminDashboard 
-              users={this.props.users}
-              orders={this.props.orders}
-              deleteUser={this.props.deleteUser}
-            />
+            <OrdersList orders={this.props.orders}/>
           </div>
         </div>
       )
@@ -45,8 +37,8 @@ class DashboardPage extends React.Component<IProps, any>{
           </div>
           <div className=" main main-raised">
             <div className="card_box">
-              <Card className="container_box text-left mrg">
-                <CardTitle>There are no users yet</CardTitle>
+              <Card className="container_box  text-left mrg">
+                <CardTitle>There are no orders yet</CardTitle>
               </Card>
             </div>
           </div>
@@ -56,20 +48,16 @@ class DashboardPage extends React.Component<IProps, any>{
   }
 }
 
-// export default DashboardPage;
 export function mapStateToProps(state: AppState) {
   return {
-    orders: state.orders,
-    users: state.users
+    orders: state.orders
   }
 }
 
 export function mapDispatchToProps(dispatch: Dispatch<any>) {
   return {
-    loadOrders: () => { dispatch(action.getOrdersFromDB()) },
-    loadUsers: () => { dispatch(action.getUsersFromDB()) },
-    deleteUser: (user:User) => { dispatch(action.deleteUserFromDB(user)) }
+    loadOrders: () => { dispatch(action.getOrdersFromDB()) }
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DashboardPage);
+export default connect(mapStateToProps, mapDispatchToProps)(UserDashboardPage);

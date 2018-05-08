@@ -21,7 +21,7 @@ module.exports = (req, res, next) => {
             if (userErr || !user) {
                 return res.status(401).end();
             }
-
+            req.verifiedUser = user;
             return next();
         });
     });

@@ -4,6 +4,7 @@ export class User {
   lastName: string;
   email: string;
   phone: string;
+  role: string;
 }
 
 export class Errors {
@@ -14,8 +15,25 @@ export class Errors {
   summary: string;
   [k: string]: any;
 }
+export class Order{
+  userId: string;
+  type: string[];
+  orderDate: string;
+  orderId:string;
+  dayOfOrder:string;
+  isActive: boolean;
+}
+export class Service{
+  _id:string;
+  type:number;
+  name:string;
+  price:number;
+  description:string;
+}
 
 export class AppState{
   status:string;
   users: User[];
+  orders: Order[];
+  services:Service[];
 }

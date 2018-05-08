@@ -73,7 +73,6 @@ function validateLoginForm(payload) {
 
 router.post('/signup', (req, res, next) => {
   const validationResult = validateSignUpForm(req.body);
-  console.log(validationResult)
   if (!validationResult.success) {
     return res.status(400).json({
       success: false,
@@ -82,8 +81,6 @@ router.post('/signup', (req, res, next) => {
     })
   }
   return passport.authenticate('local-signup', (err) => {
-    console.log('before if auth')
-    console.log('err',err)
     if (err) {
       console.log('err',err.name)
       if (err.name === 'BulkWriteError' && err.code === 11000) {
@@ -124,7 +121,6 @@ router.post('/login', (req, res, next) => {
   }
 
   return passport.authenticate('local-login', (err, token, userData) => {
-    console.log(err)
     if (err) {
       if (err.name === 'IncorrectCredentialsError') {
         return res.status(400).json({
@@ -148,21 +144,6 @@ router.post('/login', (req, res, next) => {
     });
   })(req, res, next);
 })
-
-// router.get('/google', (request, response, next) => {
-//   console.log("GOOGLE")
-//   passport.authenticate('google', {scope: ['profile', 'email']})(request, response, next);
-   
-// });
-
-// router.get('/google/redirect', passport.authenticate('google'), (req,res)=>{
-//   console.log("redirect")
-//   res.json(JSON.stringify(req.user));
-//   //res.redirect('/')
-//   }
-    
-// );
-
 
 
 module.exports = router;

@@ -15,6 +15,7 @@ const UserSchema = new mongoose.Schema({
     lastName: String,
     gender: String,
     phone: String,
+    role: String,
     googleId: String
 });
 

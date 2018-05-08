@@ -4,6 +4,10 @@ import ImageGrid from './ImageGrid';
 import RaisedButton from 'material-ui/RaisedButton';
 import ActionFavorite from 'material-ui/svg-icons/action/favorite';
 import { Link } from 'react-router-dom';
+import Auth from '../models/Auth';
+import { MapContainer } from './MapContainer';
+import Axios from 'axios';
+import OrdersList from './OrdersList'
 
 export class HomePage extends React.Component<any, any>{
   /**
@@ -11,12 +15,38 @@ export class HomePage extends React.Component<any, any>{
    */
   constructor(props: any) {
     super(props);
-
   }
   render() {
+    var user = Auth.getAuthUser();
+    var optionButton;
+    if (Auth.isUserAuthenticated()) {
+
+      optionButton = <div className="options flex-center">
+      <Link to="/user_dashboard" className="options__button">
+        <RaisedButton
+          label="My oreders"
+          labelPosition="before"
+          primary={true}
+        />
+      </Link>
+
+        <Link to="/order" className="options__button">
+          <RaisedButton
+            label="Do order"
+            labelPosition="before"
+            primary={true}
+            icon={<ActionFavorite />}
+          />
+        </Link>
+      </div>
+
+    } else {
+      optionButton = <h4><Link to="/login">Get login</Link></h4>
+    }
+
     return (
       <div className="home-page">
-        <div className="page-header header-filter clear-filter purple-filter bg">
+        <div className="page-header page-header--main header-filter clear-filter purple-filter bg">
 
         </div>
         <div className=" main main-raised">
@@ -33,24 +63,20 @@ export class HomePage extends React.Component<any, any>{
               <a href="#" className="btn btn-just-icon btn-link">
                 <i className="fa fa-instagram"></i>
               </a>
+              <div className="description flex-align-center"> <span className="btn-link icon"><i className="fa fa-phone"></i> </span> <span>(068) 222 22 22</span></div>
               <div className="description text-center">
                 <p>Makeup artist with considerable range services. I can do wedding and evening lovely looks </p>
               </div>
             </div>
-            <Link to="/login">
-              <RaisedButton
-                label="register on makeup"
-                labelPosition="before"
-                primary={true}
-                icon={<ActionFavorite />}
-                
-              />
-            </Link>
+              {optionButton}
+
           </div>
+
           <div className="flex-center gallery">
             <ImageGrid />
           </div>
-
+          <h3 className="title flex-center">Our location</h3>
+          <MapContainer />
         </div>
       </div>
     )

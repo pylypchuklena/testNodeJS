@@ -17,37 +17,20 @@ export class Header extends React.Component<any, any>{
    */
   constructor(props: any) {
     super(props);
-    this.onGoogle = this.onGoogle.bind(this);
     this.handleScroll = this.handleScroll.bind(this);
     this.state = {
-      isScroll: false
+      isScroll: false,
+      redirectPath:''
     }
   }
 
-
-  onGoogle(e: any) {
-    // e.preventDefault();
-    // console.log("onGoogle")
-    // Axios('/auth/google', {
-    //   method: 'get'
-    // })
-    //   .then((res) => {
-    //     console.log("GOOGLE AUTH",res)
-    //     if (res.status === 200) {
-
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.log("GOOGLE AUTH ERROR",error)
-    //     if (error.response) {
-
-    //     }
-    //   })
-  }
-
-
   componentDidMount() {
     window.addEventListener('scroll', this.handleScroll);
+    var path ='';
+     path = Auth.getAuthUser().role == "admin"?"/dashboard":"/";
+    this.setState({
+      redirectPath: path
+    })
   }
 
   componentWillUnmount() {
@@ -56,7 +39,7 @@ export class Header extends React.Component<any, any>{
 
   handleScroll(event: any) {
     let scrollTop = event.srcElement.body.scrollTop;
-    if (scrollTop >= 200) {
+    if (scrollTop >= 100) {
       this.setState({
         isScroll: true
       });
@@ -69,12 +52,11 @@ export class Header extends React.Component<any, any>{
 
   render() {
     return (
-
       <header className=" header fixed-top">
         <nav className={" container navbar" + (!this.state.isScroll ? 'navbar-transparent' : ' ')}>
           <div className=" flex container-raised">
             <h1 className="header__title">
-              <Link to="/" className="link">
+              <Link to={this.state.redirectPath} className="link">
                 <ActionHome
                   className="muidocs-icon-action-home icon-home"
                   style={{ height: '42px', width: '42px', fill: '#00bcd4' }}
@@ -85,7 +67,7 @@ export class Header extends React.Component<any, any>{
               {Auth.isUserAuthenticated() ? (
                 <ul className="flex">
                   <li>
-                    <AuthorizeUser/>
+                    <AuthorizeUser />
                   </li>
                   <li>
                     <Link to="/logout" className="link">Log Out</Link>
@@ -98,11 +80,8 @@ export class Header extends React.Component<any, any>{
                     </li>
 
                     <li>
-                      <Link to="/signup" className="link">Sign Up  </Link>
+                      <Link to="/signup" className="link" >Sign Up  </Link>
                     </li>
-                    {/* <li>
-                                    <a href="/auth/google" onClick={this.onGoogle} className="link">google+  </a>
-                                </li> */}
                   </ul>
                 )
               }
