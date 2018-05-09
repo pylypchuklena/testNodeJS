@@ -2,7 +2,7 @@ import * as React from 'react';
 import Header from './Header';
 import Footer from './Footer';
 import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
-import { HomePage } from '../components/HomePage';
+import { HomePage } from '../containers/HomePage';
 import { Logout } from '../components/Logout';
 
 export class BaseLayout extends React.Component<any, any>{

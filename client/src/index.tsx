@@ -2,11 +2,11 @@ import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
 
-import { HomePage } from './components/HomePage';
 import BaseLayout from './components/BaseLayout';
 import { PrivateRoute } from './components/PrivateRoute';
 import { Logout } from './components/Logout';
 
+import { HomePage } from './containers/HomePage';
 import LoginPage from './containers/LoginPage';
 import SignUpPage from './containers/SignUpPage';
 import DashboardPage from './containers/DashboardPage';

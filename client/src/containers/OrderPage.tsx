@@ -15,10 +15,17 @@ class OrderFormModel {
   orderDate: Date = new Date();
 }
 
-class OrderPage extends React.Component<{ services: Service[] }, { isRedirect: boolean, order: OrderFormModel }>{
-  /**
-   *
-   */
+interface IProps{
+  services:Service[]
+}
+
+interface IState{
+  isRedirect: boolean,
+  order: OrderFormModel
+}
+
+class OrderPage extends React.Component<IProps, IState>{
+
   constructor(props: any) {
     super(props);
     this.state = {
@@ -32,12 +39,14 @@ class OrderPage extends React.Component<{ services: Service[] }, { isRedirect: b
     this.onChangeTime = this.onChangeTime.bind(this);
 
   }
+
   handleCancel(e: any) {
     e.preventDefault();
     this.setState({
       isRedirect: true
     })
   }
+  
   onSubmit(e: any) {
     e.preventDefault();
     Axios('/api/order',
@@ -139,8 +148,6 @@ class OrderPage extends React.Component<{ services: Service[] }, { isRedirect: b
 
 }
 
-
-// export default DashboardPage;
 export function mapStateToProps(state: AppState) {
   return {
     services: state.services

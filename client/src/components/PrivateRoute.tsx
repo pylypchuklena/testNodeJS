@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Route, Redirect } from 'react-router';
 import Auth from '../models/Auth';
-import { HomePage } from './HomePage';
+import { HomePage } from '../containers/HomePage';
 
 
 

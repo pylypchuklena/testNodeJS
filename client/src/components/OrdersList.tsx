@@ -5,6 +5,7 @@ import Divider from 'material-ui/Divider';
 import Axios from 'axios';
 import Off from 'material-ui/svg-icons/content/clear';
 import Confirm from "material-ui/svg-icons/action/done";
+import Message from "material-ui/svg-icons/image/lens";
 import Auth from '../models/Auth';
 import { Link } from 'react-router-dom';
 import OrderDetail from './OrderDetail';
@@ -72,14 +73,30 @@ class OrdersList extends React.Component<IProps, any>{
         }
         if (this.state.isAdmin) {
           return (
-            <TableRow key={item.model.orderId} selected={item.selected}
-              className={((item.model.isActive) ? 'isActive' : ' ')}>
-              <TableRowColumn>1</TableRowColumn>
-              <TableRowColumn>{typeOrder.slice(0, -2)}</TableRowColumn>
-              <TableRowColumn>{orderOnDay.slice(0, -3)}</TableRowColumn>
-              <TableRowColumn>{dayOfOrder}</TableRowColumn>
-              <TableRowColumn>{(item.model.isActive) ? 'Unconfirmed' : 'confirmed'}</TableRowColumn>
-            </TableRow>
+            // <TableRow key={item.model.orderId} selected={item.selected}
+            //   className={((item.model.isActive) ? 'isActive' : ' ')}>
+            //   <TableRowColumn>1</TableRowColumn>
+            //   <TableRowColumn>{typeOrder.slice(0, -2)}</TableRowColumn>
+            //   <TableRowColumn>{orderOnDay.slice(0, -3)}</TableRowColumn>
+            //   <TableRowColumn>{dayOfOrder}</TableRowColumn>
+            //   <TableRowColumn>{(item.model.isActive) ? 'Unconfirmed' : 'confirmed'}</TableRowColumn>
+            // </TableRow>
+            <ListItem key={item.model.orderId}
+              className={((item.model.isActive) ? 'isActive' : ' ')}
+              primaryText={orderOnDay.slice(0, -3)}
+              leftIcon={<Message/>}
+              secondaryText={
+                <div className='flex-between'>
+                  <span>name</span>
+                  <ul className='flex-between icons-service'>
+                    <li><i className="fa fa-facebook-square"></i></li>
+                    <li><i className="fa fa-facebook-square"></i></li>
+                    <li><i className="fa fa-facebook-square"></i></li>
+                  </ul>
+                </div>
+              }
+
+            />
           )
         } else {
           return (
@@ -89,16 +106,24 @@ class OrdersList extends React.Component<IProps, any>{
               <TableRowColumn>{orderOnDay.slice(0, -3)}</TableRowColumn>
               <TableRowColumn>{(item.model.isActive) ? 'Unconfirmed' : 'confirmed'}</TableRowColumn>
             </TableRow>
+
           )
         }
       })
     }
     if (bodyListOrder.length == 0) {
       bodyListOrder =
-        <TableRow>
-          <TableRowColumn style={{ textAlign: 'center' }}>No orders yet</TableRowColumn>
-          <TableRowColumn style={{ textAlign: 'center' }}><Link to="/order"> Do first order</Link></TableRowColumn>
-        </TableRow>
+        // <TableRow>
+        //   <TableRowColumn style={{ textAlign: 'center' }}>No orders yet</TableRowColumn>
+        //   <TableRowColumn style={{ textAlign: 'center' }}><Link to="/order"> Do first order</Link></TableRowColumn>
+        // </TableRow>
+       
+          <div className="flex-around">
+            <span>No orders yet.  </span>
+          <Link to="/order"> Do first order</Link>
+          </div>
+          
+        
     }
     // if (this.state.isAdmin) {
     //   buttonsAdmin = <div className="button-line flex-end">
@@ -112,12 +137,12 @@ class OrdersList extends React.Component<IProps, any>{
     // }
     return (
       <div className="flex-between">
-        <div className="col-2x">
+        <div className="col col-1">
           <Card className=" text-left mrg">
             <CardTitle>Orders list :</CardTitle>
             <Divider />
             <div className="wrapList">
-              <Table onRowSelection={this.onRowSelect}>
+              {/* <Table onRowSelection={this.onRowSelect}>
                 <TableHeader
                   displaySelectAll={false}
                   adjustForCheckbox={false}>
@@ -128,11 +153,14 @@ class OrdersList extends React.Component<IProps, any>{
                 <TableBody displayRowCheckbox={false}>
                   {bodyListOrder}
                 </TableBody>
-              </Table>
+              </Table> */}
+              <List>
+                {bodyListOrder}
+              </List>
             </div>
           </Card>
         </div>
-        <div className="col-2x">
+        <div className="col col-2">
           {(this.state.selectedItem) ? <OrderDetail order={this.state.selectedItem.model} updateOrder={this.props.updateOrder} /> : <Card className="mrg"><CardTitle>Select order from list</CardTitle></Card>}
         </div>
       </div>

@@ -1,26 +1,25 @@
 import * as React from 'react';
 import { Card, CardTitle, CardText } from 'material-ui';
-import ImageGrid from './ImageGrid';
+import ImageGrid from '../components/ImageGrid';
 import RaisedButton from 'material-ui/RaisedButton';
 import ActionFavorite from 'material-ui/svg-icons/action/favorite';
 import { Link } from 'react-router-dom';
 import Auth from '../models/Auth';
-import { MapContainer } from './MapContainer';
+import { MapContainer } from '../components/MapContainer';
 import Axios from 'axios';
-import OrdersList from './OrdersList'
+import OrdersList from '../components/OrdersList'
 
 export class HomePage extends React.Component<any, any>{
-  /**
-   *
-   */
+
   constructor(props: any) {
     super(props);
   }
+
   render() {
     var user = Auth.getAuthUser();
     var optionButton;
     if (Auth.isUserAuthenticated()) {
-      optionButton = <div className="options flex-center">
+      optionButton = 
       <Link to="/user_dashboard" className="options__button">
         <RaisedButton
           label="My oreders"
@@ -28,17 +27,9 @@ export class HomePage extends React.Component<any, any>{
           primary={true}
         />
       </Link>
-        <Link to="/order" className="options__button">
-          <RaisedButton
-            label="Do order"
-            labelPosition="before"
-            primary={true}
-            icon={<ActionFavorite />}
-          />
-        </Link>
-      </div>
-    } else {
-      optionButton = <h4><Link to="/login">Get login</Link></h4>
+    } 
+    else {
+      optionButton = <h4><Link to="/login">Log in</Link></h4>
     }
 
     return (
@@ -75,6 +66,6 @@ export class HomePage extends React.Component<any, any>{
       </div>
     )
   }
-
 }
+
 export default HomePage;
