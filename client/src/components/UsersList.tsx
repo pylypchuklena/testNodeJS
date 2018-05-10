@@ -28,6 +28,7 @@ interface IState {
 }
 
 export function mapStateToProps(state: AppState) {
+  console.log(state.users)
   return {
     users:state.users
   }
@@ -51,8 +52,8 @@ class UsersList extends React.Component<IProps, IState>{
   }
 
   render() {
-    var listItem;
-    if (this.props.users)
+    var listItem ;
+    if (this.props.users){
       listItem = this.props.users.map((user) => {
         if (user.role == "user")
           return (<ListItem key={user.id}
@@ -63,9 +64,12 @@ class UsersList extends React.Component<IProps, IState>{
           />
           )
       })
+    }else{
+      console.log()
+      listItem=<div> No subcribers yet</div>;
+    }
 
     return (
-      <>
         <div className="card_box">
           <Card className="container_box text-left mrg">
             <CardTitle>Subscribers list :</CardTitle>
@@ -77,7 +81,6 @@ class UsersList extends React.Component<IProps, IState>{
             </div>
           </Card>
         </div>
-      </>
     )
   }
 }

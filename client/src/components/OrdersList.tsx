@@ -3,6 +3,8 @@ import { List, ListItem, Card, CardTitle } from 'material-ui';
 import { Order, AppState, User, Service } from '../types/userModel';
 import Divider from 'material-ui/Divider';
 import Message from "material-ui/svg-icons/image/lens";
+import Done from "material-ui/svg-icons/action/done";
+import Cancel from "material-ui/svg-icons/content/clear";
 import Auth from '../models/Auth';
 import { Link } from 'react-router-dom';
 import OrderDetail from './OrderDetail';
@@ -87,36 +89,57 @@ class OrdersList extends React.Component<IProps, IState>{
         var dayOfOrder = new Date(item.model.dayOfOrder).toLocaleString();
         var orderOnDay = new Date(item.model.orderDate).toLocaleString();
 
-        var classString = '';
-        switch (item.model.orderStatus) {
+        // var classString = '';
+        // switch (item.model.orderStatus) {
+        //   case OrderStatus.Pending: {
+        //     classString = 'pending'
+        //     break;
+        //   }
+        //   case OrderStatus.Confirmed: {
+        //     classString = 'confirmed'
+        //     break;
+        //   }
+        //   case OrderStatus.Done: {
+        //     classString = 'done'
+        //     break;
+        //   }
+        //   case OrderStatus.Canceled: {
+        //     classString = 'canceled'
+        //     break;
+        //   }
+        //   default: {
+        //     classString = ''
+        //     break;
+        //   }
+        // }
+        var statusIcon =<></>;
+        switch(item.model.orderStatus){
           case OrderStatus.Pending: {
-            classString = 'pending'
+           statusIcon = <Message /> 
             break;
           }
-          case OrderStatus.Confirmed: {
-            classString = 'confirmed'
-            break;
-          }
+        
           case OrderStatus.Done: {
-            classString = 'done'
+            statusIcon = <Done className="done"/>
             break;
           }
           case OrderStatus.Canceled: {
-            classString = 'canceled'
+            statusIcon = <Cancel className="canceled"/>
             break;
           }
           default: {
-            classString = ''
+            statusIcon = <></>
             break;
           }
         }
 
         return (
           <ListItem key={item.model.orderId}
-            className={((this.state.selectedOrder == item.model.orderId) ? 'isActive' : ' ') + " "+ classString}
+            className={((this.state.selectedOrder == item.model.orderId) ? 'isActive' : ' ') + " "
+            // + classString
+          }
             primaryText={orderOnDay.slice(0, -3)}
-
-            leftIcon={(item.model.orderStatus == OrderStatus.Pending) ? <Message /> : <></>}
+            leftIcon={statusIcon}
             onClick={() => { this.onRowSelect(item) }}
             secondaryText={
               <div className='flex-between'>

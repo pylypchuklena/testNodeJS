@@ -27,7 +27,7 @@ router.post('/order', (req, res, next) => {
     orderDate : req.body.orderDate,
     type : req.body.types,
     userId: req.verifiedUser._id,
-    orderStatus: '1',
+    orderStatus: '4',
     dayOfOrder :currentDay
   }
   Order.create(neworder).then(function (order) {

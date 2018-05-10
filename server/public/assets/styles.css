@@ -83,16 +83,6 @@ a:hover {
   text-align: left;
 }
 
-.error-message {
-  padding: 0 16px;
-  color: tomato;
-}
-
-.success-message {
-  padding: 0 16px;
-  color: green;
-}
-
 .flex {
   display: flex;
   justify-content: space-between;
@@ -111,6 +101,9 @@ a:hover {
 .flex-between{
   display: flex;
   justify-content: space-between;
+}
+.flex-column{
+  flex-direction: column;
 }
 .flex-around{
   display: flex;
@@ -348,8 +341,11 @@ img {
   padding: 16px;
 }
 
-.isActive.done, .done{
-  background-color: #333 !important;
+.done{
+  fill:  green !important;
+}
+.canceled{
+  fill: tomato !important;
 }
 
 .error-message {
@@ -481,6 +477,20 @@ img.imgCover{
   flex-grow: 2;
   min-width: 175px;
   max-height: inherit;
+}
+.orderInfo__status{
+  text-align: center;
+    padding: 5px;
+    font-size: 10px;
+  
+}
+.orderInfo__status span{
+  position: relative;
+}
+.icon-status{
+  position: absolute;
+  left: -15px;
+  top: 2;
 }
 .orderInfo__price{
   display: flex;
