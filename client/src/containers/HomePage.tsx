@@ -17,19 +17,17 @@ export class HomePage extends React.Component<any, any>{
 
   render() {
     var user = Auth.getAuthUser();
-    var optionButton;
+    var path = "/login"
+    var buttonLabel = "Log In"
     if (Auth.isUserAuthenticated()) {
-      optionButton = 
-      <Link to="/user_dashboard" className="options__button">
-        <RaisedButton
-          label="My oreders"
-          labelPosition="before"
-          primary={true}
-        />
-      </Link>
-    } 
-    else {
-      optionButton = <h4><Link to="/login">Log in</Link></h4>
+      if (user.role == "admin") {
+        path = "/dashboard";
+        buttonLabel = "Dashboard"
+      }
+      else {
+        path = "/user_dashboard";
+        buttonLabel = "My Orders"
+      }
     }
 
     return (
@@ -55,7 +53,13 @@ export class HomePage extends React.Component<any, any>{
                 <p>Makeup artist with considerable range services. I can do wedding and evening lovely looks </p>
               </div>
             </div>
-              {optionButton}
+            <Link to={path} className="options__button">
+              <RaisedButton
+                label={buttonLabel}
+                labelPosition="before"
+                primary={true}
+              />
+            </Link>
           </div>
           <div className="flex-center gallery">
             <ImageGrid />

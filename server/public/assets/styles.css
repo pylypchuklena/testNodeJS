@@ -257,7 +257,11 @@ nav .link {
   height: 15px;
   width: 15px;
   margin-right: 10px;
+  position: relative;
+
 }
+
+
 .icon-favorite{
   margin-left: 5px;
 }
@@ -343,7 +347,18 @@ img {
 .field-line, .button-line {
   padding: 16px;
 }
-
+.isActive.canceled, .canceled{
+  background-color: hotpink !important;
+}
+.isActive.pending, .pending{
+  background-color: orange !important;
+}
+.isActive.done, .done{
+  background-color: #333 !important;
+}
+.isActive.confirmed, .confirmed{
+  background-color: green !important;
+}
 .error-message {
   padding: 0 16px;
   color: tomato;
@@ -457,7 +472,52 @@ img.imgCover{
 }
 .col-1{
   flex-grow: 1;
+  min-width: 300px;
 }
 .col-2{
   flex-grow: 3;
+}
+.wrapOrderInfo{
+  min-width: 260px;
+  flex-grow: 2
+}
+.boxOrderDetail{
+  flex-grow: 1
+}
+.boxOrderDetail .wrapUserImg{
+  flex-grow: 2;
+  min-width: 175px;
+  max-height: inherit;
+}
+.orderInfo__price{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-grow: 2;
+  justify-content: center;
+}
+.orderInfo__price__count{
+  font-size: 32px;
+    padding: 10px;
+    min-width: 100px;
+    text-align: center;
+}
+.orderInfo__types{
+  min-height: 120px;
+}
+.orderInfo__types .icon{
+  display: inline-block;
+}
+.orderInfo__day{
+  font-weight: bold;
+}
+@media(max-width: 777px){
+  .boxOrders{
+    flex-direction: column;
+  }
+}
+@media(max-width: 600px){
+  .wrapOrderInfo{
+    min-width: 140px;
+  }
 }

@@ -10,7 +10,7 @@ import { FormUser } from './SignUpPage';
 
 interface IProps {
   status: string;
-  logInUser: (user: User) => void;
+  logInUser: ()=>void;
 }
 interface IState {
   user: FormUser,
@@ -19,9 +19,6 @@ interface IState {
   redirectPath: string
 }
 class LoginPage extends React.Component<IProps, IState>{
-  /**
-   *
-   */
   constructor(props: IProps) {
     super(props);
 
@@ -36,6 +33,7 @@ class LoginPage extends React.Component<IProps, IState>{
     this.onChangeFieldUser = this.onChangeFieldUser.bind(this);
   }
 
+  //TODO: move to action with redirect
   onSubmitUser(e: any) {
     e.preventDefault();
 
@@ -53,21 +51,19 @@ class LoginPage extends React.Component<IProps, IState>{
         if (res.status === 200) {
           Auth.authenticateUser(res.data.token);
           Auth.authUser(res.data.user);
-          var path = Auth.getAuthUser().role == "admin"?"/dashboard":"/";
+          this.props.logInUser();
           this.setState({
             error: new Errors(),
-            redirectPath: path
+            redirectPath: "/"
           })
         }
       })
       .catch((error) => {
         if (error.response) {
-          console.log('login', error.response)
           var err = new Errors();
           err.fieldEmail = error.response.data.errors.email ? error.response.data.errors.email : '';
           err.fieldPassword = error.response.data.errors.password ? error.response.data.errors.password : '';
           err.summary = error.response.data.message ? error.response.data.message : '';
-          //update state
           this.setState({ error: err })
         }
       })
@@ -81,7 +77,6 @@ class LoginPage extends React.Component<IProps, IState>{
       user
     })
   }
-
 
   render() {
     if (this.state.redirectPath) return (<Redirect to={this.state.redirectPath} />)
@@ -97,7 +92,6 @@ class LoginPage extends React.Component<IProps, IState>{
           />
         </div>
       </div>
-
     )
   }
 }
@@ -111,7 +105,7 @@ export function mapStateToProps(state: AppState) {
 }
 export function mapDispatchToProps(dispatch: Dispatch<any>) {
   return {
-    logInUser: (user: User) => { dispatch(action.logInUser(user)) }
-  }
+    logInUser: () => { dispatch(action.logInUser()) },
+  };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);

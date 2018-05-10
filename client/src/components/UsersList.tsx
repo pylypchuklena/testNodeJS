@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Card, CardTitle, List, ListItem } from 'material-ui';
-import { User } from '../types/userModel';
+import { User, AppState } from '../types/userModel';
 
 import Avatar from 'material-ui/Avatar';
 import EditorEdit from 'material-ui/svg-icons/editor/mode-edit';
@@ -9,36 +9,45 @@ import { blue500 } from 'material-ui/styles/colors';
 import { Redirect } from 'react-router';
 import Divider from 'material-ui/Divider';
 import Off from 'material-ui/svg-icons/action/delete-forever';
+import { Dispatch } from 'redux';
+import * as action from './../action';
+import { connect } from 'react-redux';
 
-interface IDashboard {
-  users: User[];
-  onDeleteUser: (user: User) => void;
-}
 const styles = {
   button: {
     margin: 12,
   }
 }
-interface IState {
-  user: User
-}
-export class UsersList extends React.Component<IDashboard, IState>{
 
-  /**
-   *
-   */
-  constructor(props: IDashboard) {
+interface IProps {
+  users: User[];
+  onDeleteUser: (user: User) => void;
+}
+
+interface IState {
+}
+
+export function mapStateToProps(state: AppState) {
+  return {
+    users:state.users
+  }
+}
+
+export function mapDispatchToProps(dispatch: Dispatch<any>) {
+  return {
+    onDeleteUser: (user:User) => { dispatch(action.deleteUserFromDB(user)) }
+  };
+}
+
+class UsersList extends React.Component<IProps, IState>{
+ 
+  constructor(props: IProps) {
     super(props);
-    var delUser = new User()
-    this.state = {
-      user: delUser
-    }
     this.handleDelete = this.handleDelete.bind(this);
   }
 
-  handleDelete(e: any) {
-    e.preventDefault();
-    this.props.onDeleteUser(this.state.user);
+  handleDelete(user: User) {
+    this.props.onDeleteUser(user);
   }
 
   render() {
@@ -50,7 +59,7 @@ export class UsersList extends React.Component<IDashboard, IState>{
             primaryText={(user.firstName ? user.firstName : 'Subscriber Name') + ' ' + (user.lastName ? user.lastName : '')}
             secondaryText={user.email}
             leftAvatar={<Avatar icon={<ActionFace />} />}
-            rightIcon={<Off hoverColor={blue500} onClick={(e) => { this.handleDelete }} />}
+            rightIcon={<Off hoverColor={blue500} onClick={(e) => {e.preventDefault(); this.handleDelete(user) }} />}
           />
           )
       })
@@ -69,9 +78,8 @@ export class UsersList extends React.Component<IDashboard, IState>{
           </Card>
         </div>
       </>
-
     )
   }
 }
 
-export default UsersList;
+export default connect(mapStateToProps, mapDispatchToProps)(UsersList);
