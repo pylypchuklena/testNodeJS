@@ -347,18 +347,11 @@ img {
 .field-line, .button-line {
   padding: 16px;
 }
-.isActive.canceled, .canceled{
-  background-color: hotpink !important;
-}
-.isActive.pending, .pending{
-  background-color: orange !important;
-}
+
 .isActive.done, .done{
   background-color: #333 !important;
 }
-.isActive.confirmed, .confirmed{
-  background-color: green !important;
-}
+
 .error-message {
   padding: 0 16px;
   color: tomato;
