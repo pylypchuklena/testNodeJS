@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Card, CardText } from 'material-ui/Card';
-import { RaisedButton, TimePicker, DatePicker, RadioButton, Checkbox } from 'material-ui';
+import { RaisedButton, TimePicker, DatePicker, Checkbox } from 'material-ui';
 import { Redirect } from 'react-router';
 import Axios from 'axios';
 import Auth from '../models/Auth';
@@ -14,14 +14,15 @@ class OrderFormModel {
   orderDate: Date = new Date();
 }
 
-interface IProps{
-  services:Service[]
+interface IProps {
+  services: Service[]
 }
 
-interface IState{
+interface IState {
   isRedirect: boolean,
   order: OrderFormModel,
-  price:number
+  price: number,
+  errorMsg: string
 }
 
 class OrderPage extends React.Component<IProps, IState>{
@@ -31,7 +32,8 @@ class OrderPage extends React.Component<IProps, IState>{
     this.state = {
       isRedirect: false,
       order: new OrderFormModel(),
-      price:0
+      price: 0,
+      errorMsg: null
     }
     this.onChangeCheckbox = this.onChangeCheckbox.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
@@ -47,27 +49,36 @@ class OrderPage extends React.Component<IProps, IState>{
       isRedirect: true
     })
   }
-  
+
   onSubmit(e: any) {
     e.preventDefault();
-    Axios('/api/order',
-      {
-        method: 'post',
-        data: JSON.stringify({
-          types: this.state.order.types,
-          orderDate: this.state.order.orderDate,
-        }),
-        headers: {
-          'Content-type': 'application/json',
-          'Authorization': `bearer ${Auth.getToken()}`
-        }
-      }).then((res) => {
-        if (res.status === 200) {
-          this.setState({
-            isRedirect: true
-          })
-        }
+    var selectedServices = this.props.services.filter(x => this.state.order.types.indexOf(x.type.toString()) >= 0);
+    var today = new Date();
+
+    if (selectedServices.length > 0 && this.state.order.orderDate > today) {
+      Axios('/api/order',
+        {
+          method: 'post',
+          data: JSON.stringify({
+            types: this.state.order.types,
+            orderDate: this.state.order.orderDate,
+          }),
+          headers: {
+            'Content-type': 'application/json',
+            'Authorization': `bearer ${Auth.getToken()}`
+          }
+        }).then((res) => {
+          if (res.status === 200) {
+            this.setState({
+              isRedirect: true
+            })
+          }
+        })
+    } else {
+      this.setState({
+        errorMsg: "Fill in all the input data"
       })
+    }
   };
 
   onChangeCheckbox(e: any) {
@@ -79,11 +90,11 @@ class OrderPage extends React.Component<IProps, IState>{
     else {
       order.types.push(e.target.name);
     }
-   
+
     var selectedServices = this.props.services.filter(x => order.types.indexOf(x.type.toString()) >= 0)
     var price = 0;
-    selectedServices.forEach(item=>{price += item.price})
-    this.setState({ order,price});
+    selectedServices.forEach(item => { price += item.price })
+    this.setState({ order, price });
   };
   onChangeDate(e: any, date: Date) {
     var changedOrder = { ...this.state.order };
@@ -93,6 +104,7 @@ class OrderPage extends React.Component<IProps, IState>{
     this.setState({ order: changedOrder })
   }
   onChangeTime(e: any, date: Date) {
+
     var changedOrder = { ...this.state.order };
     changedOrder.orderDate.setHours(date.getHours());
     changedOrder.orderDate.setMinutes(date.getMinutes());
@@ -102,48 +114,44 @@ class OrderPage extends React.Component<IProps, IState>{
     if (this.state.isRedirect) return (<Redirect to="/" />)
     var services = this.props.services.map(x => { return <Checkbox label={x.name} name={x.type.toString()} key={x._id} onCheck={this.onChangeCheckbox} /> })
     return (
-      <div className="dashboard-page">
-        <div className="page-header header-filter clear-filter purple-filter bg">
-        </div>
-        <div className=" main main-raised">
-          <div className="card_box">
-            <Card className="container_box mrg">
-              <form onSubmit={this.onSubmit} className="orderForm">
-                <h2 className='card-heading'>Order visit</h2>
-                <div className="text-left  orderForm__radioBtns">
-                  <h4>Services</h4>
-                  {services}
-                </div>
-                <DatePicker
-                  floatingLabelText="Date "
-                  hintText="Choose day"
-                  onChange={this.onChangeDate} />
-                <TimePicker
-                  floatingLabelText="Time "
-                  format="24hr"
-                  floatingLabelFixed={true}
-                  hintText="10 minutes step"
-                  onChange={this.onChangeTime}
-                  minutesStep={10}
-                />
-                <CardText>
-                  <div className="orderForm__price">
-                  <div className="orderForm__price__title">Price</div>
-                  <div  className="orderForm__price__count">{this.state.price}</div> 
-                  </div>
-                </CardText>
-                <div className="button-line flex-end">
-                  <div className="pddng">
-                    <RaisedButton label="Cansel" onClick={this.handleCancel} secondary />
-                  </div>
-                  <div className="pddng">
-                    <RaisedButton type="submit" label="Save order" primary />
-                  </div>
-                </div>
-              </form>
-            </Card>
-          </div>
-        </div>
+
+      <div className="card_box">
+        <Card className="container_box mrg">
+          <form onSubmit={this.onSubmit} className="orderForm">
+            <h2 className='card-heading'>Order visit</h2>
+            <div className="text-left  orderForm__radioBtns">
+              <h4>Services</h4>
+              {services}
+            </div>
+            <DatePicker
+              floatingLabelText="Date "
+              hintText="Choose day"
+              onChange={this.onChangeDate} />
+            <TimePicker
+              floatingLabelText="Time "
+              format="24hr"
+              floatingLabelFixed={true}
+              hintText="10 minutes step"
+              onChange={this.onChangeTime}
+              minutesStep={10}
+            />
+            <CardText>
+              <div className="orderForm__price">
+                <div className="orderForm__price__title">Price</div>
+                <div className="orderForm__price__count">{this.state.price}</div>
+              </div>
+            </CardText>
+            {(this.state.errorMsg) ? <p className="error-message">{this.state.errorMsg}</p> : <></>}
+            <div className="button-line flex-end">
+              <div className="pddng">
+                <RaisedButton label="Cansel" onClick={this.handleCancel} secondary />
+              </div>
+              <div className="pddng">
+                <RaisedButton type="submit" label="Save order" primary />
+              </div>
+            </div>
+          </form>
+        </Card>
       </div>
     )
   }

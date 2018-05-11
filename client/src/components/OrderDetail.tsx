@@ -10,37 +10,37 @@ import Message from "material-ui/svg-icons/image/lens";
 import Done from "material-ui/svg-icons/action/done";
 import Cancel from "material-ui/svg-icons/content/clear";
 import { Dispatch, connect } from 'react-redux';
+import Auth from '../models/Auth';
 
 
-const style={
-  statusIcon:{
+const style = {
+  statusIcon: {
     height: '16px',
     width: '16px'
   },
-  done:{
-    color:'#008000'
+  done: {
+    color: '#008000'
   }
 }
 interface IProps {
   orderViewModel: OrderItemViewModel;
   updateOrder: (order: Order) => void;
+  // deleteOrder: (order:string)=>void;
 }
 
 class OrderDetail extends React.Component<IProps, any>{
   constructor(props: IProps) {
     super(props);
-    this.handleOrderConfirmed =this.handleOrderConfirmed.bind(this);
-    this.handleOrderReject =this.handleOrderReject.bind(this);
+    this.handleStatusChange = this.handleStatusChange.bind(this);
+    // this.handleRejectOrder = this.handleRejectOrder.bind(this);
   }
 
-  handleOrderConfirmed(){
+  // handleRejectOrder(order: string){
+  //   this.props.deleteOrder(order)
+  // }
+  handleStatusChange(newStatus: OrderStatus) {
     var order = this.props.orderViewModel.model;
-    order.orderStatus =  OrderStatus.Confirmed;
-    this.props.updateOrder(order)
-  }
-  handleOrderReject(){
-    var order = this.props.orderViewModel.model;
-    order.orderStatus =  OrderStatus.Canceled;
+    order.orderStatus = newStatus;
     this.props.updateOrder(order)
   }
 
@@ -63,35 +63,60 @@ class OrderDetail extends React.Component<IProps, any>{
 
     var orderOnDay = new Date(this.props.orderViewModel.model.orderDate).toLocaleString();
     var price = 0;
-    strOrders.forEach((item)=>{ price += item.price })
-   
+    strOrders.forEach((item) => { price += item.price })
+
     var statusIcon = <></>;
-    var statusText=''
-    switch (this.props.orderViewModel.model.orderStatus) {
-      case OrderStatus.Pending: {
-        statusText ="pending",
-        statusIcon = <Message className="icon-status pending" style={style.statusIcon}/>
-        break;
+    var buttons = <></>;
+    var statusText = ''
+    
+      switch (this.props.orderViewModel.model.orderStatus) {
+        case OrderStatus.Pending: {
+          statusText = "pending",
+            statusIcon = <Message className="icon-status pending" style={style.statusIcon} /> ,
+            buttons = <>
+              <div className="pddng">
+                <RaisedButton type="submit" label="Reject" onClick={() => { this.handleStatusChange(OrderStatus.Canceled) }} secondary={true} />
+              </div>
+              <div className="pddng">
+                <RaisedButton type="submit" label="Confirm" onClick={() => { this.handleStatusChange(OrderStatus.Confirmed) }} primary={true} />
+              </div>
+            </>
+          break;
+        }
+        case OrderStatus.Confirmed: {
+          statusText = "confirmed",
+            buttons =
+            <div className="pddng">
+              <RaisedButton type="submit" label="Done" onClick={() => { this.handleStatusChange(OrderStatus.Done) }} primary={true} />
+            </div>
+          break;
+        }
+        case OrderStatus.Done: {
+          statusText = "done"
+          statusIcon = <Done className="done icon-status" style={style.statusIcon} />
+          break;
+        }
+        case OrderStatus.Canceled: {
+          statusText = "canceled"
+          statusIcon = <Cancel className="canceled icon-status" style={style.statusIcon} />
+          buttons =
+            <div className="pddng">
+              <RaisedButton type="submit" label="Restore order" onClick={() => { this.handleStatusChange(OrderStatus.Pending) }} primary={true} />
+            </div>
+          break;
+        }
+        default: {
+          statusIcon = <></>
+          break;
+        }
       }
-      case OrderStatus.Confirmed: {
-        statusText ="confirmed"
-        break;
-      }
-      case OrderStatus.Done: {
-        statusText ="done"
-        statusIcon = <Done className="done icon-status" style={style.statusIcon}/>
-        break;
-      }
-      case OrderStatus.Canceled: {
-        statusText ="canceled"
-        statusIcon = <Cancel className="canceled icon-status" style={style.statusIcon}/>
-        break;
-      }
-      default: {
-        statusIcon = <></>
-        break;
-      }
+    if (Auth.getAuthUser().role != 'admin') {
+      buttons =
+        <div className="pddng">
+          <RaisedButton type="submit" label="Reject" onClick={() => { this.handleStatusChange(OrderStatus.Canceled) }} primary={true} />
+        </div>
     }
+
 
     return (
       <Card className=" mrg">
@@ -123,12 +148,7 @@ class OrderDetail extends React.Component<IProps, any>{
                 </div>
               </div>
               <div className="button-line flex-end">
-                <div className="pddng">
-                  <RaisedButton type="submit" label="Reject" onClick={this.handleOrderReject} secondary={true} />
-                </div>
-                <div className="pddng">
-                  <RaisedButton type="submit" label="Confirm" onClick={this.handleOrderConfirmed} primary={true} />
-                </div>
+                {buttons}
               </div>
             </CardText>
           </div>
@@ -145,8 +165,8 @@ export function mapStateToProps(state: AppState, ownProps: any) {
 
 export function mapDispatchToProps(dispatch: Dispatch<any>) {
   return {
-    updateOrder: (order: Order) => { dispatch(action.updateOrderInDB(order)) }
-    // onDeleteUser: (user: User) => { dispatch(action.deleteUserFromDB(user)) }
+    updateOrder: (order: Order) => { dispatch(action.updateOrderInDB(order)) },
+    // deleteOrder:(order: string) => { dispatch(action.deleteOrderInDB(order)) }
   };
 }
 

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
-import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import BaseLayout from './components/BaseLayout';
 import { PrivateRoute } from './components/PrivateRoute';
@@ -19,9 +19,7 @@ import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import rootReducer from './redusers';
 import Profile from './components/Profile';
-import OrderPage from './containers/OrderPage';
 import { NotFound } from './components/NotFound';
-import UserDashboardPage from './containers/UserDashboardPage';
 import Auth from './models/Auth';
 import * as action from './action';
 
@@ -46,9 +44,8 @@ ReactDom.render(
             <Route path="/signup" component={SignUpPage} />
             <Route path="/logout" component={Logout} />
             <PrivateRoute path="/profile/:id" component={Profile} />
-            <PrivateRoute path="/order" component={OrderPage} />  
             <PrivateRoute path="/dashboard" CheckAdmin={true} component={DashboardPage} />
-            <PrivateRoute path="/user_dashboard"  component={UserDashboardPage} />
+            <PrivateRoute path="/user_dashboard"  component={DashboardPage} />
             <Route path="*" component={NotFound} />
           </Switch>
         </BaseLayout>

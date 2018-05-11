@@ -51,6 +51,8 @@ function orderReduser(state: Order[] = [], action: IAction): Order[] {
       return action.value;
     case constants.UPDATE_ORDER:
       return updateOrder(state,action.value);
+    case constants.DELETE_ORDER:
+      return deleteOrder(state,action.value);
     default: {
       return state
     }
@@ -70,9 +72,12 @@ function serviceReduser(state: Service[] = [], action: IAction): Service[] {
 function updateOrder(state: Order[],order:Order):Order[]{
   return state.map(item=>{
     if(item.orderId == order.orderId)
-     return order;
+     return {...order};
     return item;
   })
+}
+function deleteOrder(state:Order[],id:string):Order[]{
+  return  state.filter(item=>{return item.orderId!=id});
 }
 
 export const rootReducer = combineReducers<AppState>({

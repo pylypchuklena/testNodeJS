@@ -73,20 +73,22 @@ class ImageGrid extends React.Component<any, any>{
   }
   handleResize() {
     if(window.innerWidth < 998 && window.innerWidth > 620 ){
-      this.setState({
+      setTimeout(() =>  this.setState({
         cols: 2,
         row: 1
-      })
+      }))
     }else if(window.innerWidth < 620){
-      this.setState({
+      setTimeout(() =>  this.setState({
          cols: 1,
          row: 1
-      })
+      }))
     }else{
+      setTimeout(() =>  
       this.setState({
         cols: 4,
         row: 2
       })
+    )
     }
 
   }

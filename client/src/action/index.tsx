@@ -148,7 +148,6 @@ export function getOrdersFromDB(): any {
 }
 
 export function updateOrderInDB(order:Order): any {
-  console.log(order, 'action')
   return (dispatch: any) => {
     return axios({
       method: 'put',
@@ -165,11 +164,34 @@ export function updateOrderInDB(order:Order): any {
       if (res.status === 200) {
         dispatch(updateOrder(res.data.order))
       }
+    })
+  }
+}
+export function deleteOrderInDB(order: string): any {
+  return (dispatch: any) => {
+    return axios({
+      method: 'delete',
+      url: `/api/order/${order}`,
+      data: order,
+      headers: {
+        'Content-type': 'application/json',
+        'Authorization': `bearer ${Auth.getToken()}`
+      }
+    }).then((res) => {
+      if (res.status === 200) {
+        dispatch(deleteOrder(res.data.order))
+      }
     }
     )
   }
 }
 
+export function deleteOrder(order:any):IAction{
+  return {
+    type: constants.DELETE_ORDER,
+    value: order
+  }
+}
 export function updateOrder(order:any):IAction{
   return {
     type: constants.UPDATE_ORDER,

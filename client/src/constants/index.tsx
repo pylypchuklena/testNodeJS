@@ -10,3 +10,4 @@ export const GET_ALL_ORDERS = 'GET_ALL_ORDERS';
 export const UPDATE_ORDER ='UPDATE_ORDER';
 export const GET_ALL_SERVICES = 'GET_ALL_SERVICES';
 export const ADD_SERVICES = 'ADD_SERVICES';
+export const DELETE_ORDER ='DELETE_ORDER';
