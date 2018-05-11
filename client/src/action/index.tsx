@@ -148,14 +148,13 @@ export function getOrdersFromDB(): any {
 }
 
 export function updateOrderInDB(order:Order): any {
+  console.log(order, 'action')
   return (dispatch: any) => {
     return axios({
       method: 'put',
       url: `/api/order/${order.orderId}`,
       data: {
-        type: order.type,
         isActive: order.isActive,
-        orderDate: order.orderDate,
         orderStatus: order.orderStatus
       },
       headers: {

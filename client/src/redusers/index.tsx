@@ -49,8 +49,8 @@ function orderReduser(state: Order[] = [], action: IAction): Order[] {
   switch (action.type) {
     case constants.GET_ALL_ORDERS:
       return action.value;
-      case constants.UPDATE_ORDER:
-return updateOrder(state,action.value);
+    case constants.UPDATE_ORDER:
+      return updateOrder(state,action.value);
     default: {
       return state
     }

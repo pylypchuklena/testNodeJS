@@ -27,7 +27,6 @@ interface IState {
 }
 
 export function mapStateToProps(state: AppState) {
-  console.log("service", state.services);
   return {
     orders: state.orders,
     users: state.users,
@@ -52,7 +51,7 @@ class OrdersList extends React.Component<IProps, IState>{
       selectedOrder: null
     }
   }
-
+ 
   componentWillMount() {
     this.props.getServices();
     this.setState({
@@ -66,6 +65,7 @@ class OrdersList extends React.Component<IProps, IState>{
     })
   }
   componentWillReceiveProps() {
+    console.log('recive', this.props.orders)
     this.setState({
       orders: this.props.orders.map(x => {
         return new OrderItemViewModel(
@@ -84,41 +84,21 @@ class OrdersList extends React.Component<IProps, IState>{
 
   render() {
     var bodyListOrder;
+    var pendingOrders = 0;
     if (this.props.orders) {
       bodyListOrder = this.state.orders.map((item: OrderItemViewModel) => {
         var dayOfOrder = new Date(item.model.dayOfOrder).toLocaleString();
         var orderOnDay = new Date(item.model.orderDate).toLocaleString();
-
-        // var classString = '';
-        // switch (item.model.orderStatus) {
-        //   case OrderStatus.Pending: {
-        //     classString = 'pending'
-        //     break;
-        //   }
-        //   case OrderStatus.Confirmed: {
-        //     classString = 'confirmed'
-        //     break;
-        //   }
-        //   case OrderStatus.Done: {
-        //     classString = 'done'
-        //     break;
-        //   }
-        //   case OrderStatus.Canceled: {
-        //     classString = 'canceled'
-        //     break;
-        //   }
-        //   default: {
-        //     classString = ''
-        //     break;
-        //   }
-        // }
+        
+        if(item.model.orderStatus ==OrderStatus.Pending){
+          pendingOrders +=1
+        }
         var statusIcon =<></>;
         switch(item.model.orderStatus){
           case OrderStatus.Pending: {
-           statusIcon = <Message /> 
+           statusIcon = <Message className="pending" /> 
             break;
           }
-        
           case OrderStatus.Done: {
             statusIcon = <Done className="done"/>
             break;
@@ -135,31 +115,28 @@ class OrdersList extends React.Component<IProps, IState>{
 
         return (
           <ListItem key={item.model.orderId}
-            className={((this.state.selectedOrder == item.model.orderId) ? 'isActive' : ' ') + " "
-            // + classString
-          }
+            className={((this.state.selectedOrder == item.model.orderId) ? 'isActive' : ' ') + " "}
             primaryText={orderOnDay.slice(0, -3)}
             leftIcon={statusIcon}
             onClick={() => { this.onRowSelect(item) }}
             secondaryText={
               <div className='flex-between'>
-
                 <span>{(item.user.firstName) ? item.user.firstName : ''} {(item.user.lastName) ? item.user.lastName : ''}</span>
                 <ul className='flex-between icons-service'>
                   {item.getServices().map(x => {
                     var fileName = "./assets/img/icons/service_" + x.type.toString() + ".svg";
-                    return (<li><span className="icon ">
+                    return (<li key={x.type}><span className="icon ">
                       <img src={fileName} alt="icon" />
                     </span></li>)
                   }
                   )}
-
                 </ul>
               </div>
             }
           />
         )
       })
+
     }
     if (bodyListOrder.length == 0) {
       bodyListOrder =
@@ -172,7 +149,8 @@ class OrdersList extends React.Component<IProps, IState>{
     return (
       <div className="flex-between boxOrders">
         <div className="col col-1">
-          <Card className=" text-left mrg">
+          <Card className="boxOrders__list text-left mrg">
+          <span className="boxOrders__notice">{pendingOrders} in pending</span>
             <CardTitle>Orders</CardTitle>
             <Divider />
             <div className="wrapList">

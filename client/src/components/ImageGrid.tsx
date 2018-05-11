@@ -58,41 +58,53 @@ class ImageGrid extends React.Component<any, any>{
    */
   constructor(props: any) {
     super(props);
+    this.state={
+      cols: 4,
+      row: 2
+    }
+    this.handleResize=this.handleResize.bind(this);
+  }
+
+  componentDidMount() {
+    window.addEventListener('resize', this.handleResize);
+  }
+  componentWillMount() {
+    window.addEventListener('load', this.handleResize);
+  }
+  handleResize() {
+    if(window.innerWidth < 998 && window.innerWidth > 620 ){
+      this.setState({
+        cols: 2,
+        row: 1
+      })
+    }else if(window.innerWidth < 620){
+      this.setState({
+         cols: 1,
+         row: 1
+      })
+    }else{
+      this.setState({
+        cols: 4,
+        row: 2
+      })
+    }
 
   }
   render() {
     return (
       <div className="container-raised">
-      {/* <GridList
-        cols={2}
-        cellHeight={200}
-        padding={1}
-        style={{display: 'flex',  flexWrap: 'wrap',  justifyContent: 'center',
-        maxWidth: '600px', width: '100%'}}
-      >
-      {tilesData.map((tile) => (
-        <GridTile
-          key={tile.img}
-          titleBackground="linear-gradient(to bottom, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)"
-          cols={tile.featured ? 2 : 1}
-          rows={tile.featured ? 2 : 1}
-        >
-          <img src={tile.img} className="imgCover" />
-        </GridTile>
-      ))}
-      </GridList> */}
        <GridList
        cellHeight={300}
        padding={1}
-       cols={4}
+       cols={this.state.cols}
        style={{display: 'flex',  flexWrap: 'wrap',  justifyContent: 'center'
        }}
      >
        {tilesData.map((tile) => (
          <GridTile
            key={tile.img}
-           cols={tile.featured ? 4 : 1}
-          rows={tile.featured ? 2 : 1}
+           cols={tile.featured ? this.state.cols : 1}
+          rows={tile.featured ? this.state.row : 1}
          >
            <img src={tile.img} />
          </GridTile>

@@ -347,7 +347,10 @@ img {
 .canceled{
   fill: tomato !important;
 }
-
+.pending{
+  fill: rgb(117, 117, 117) !important;
+  fill: rgb(255, 64, 129) !important
+}
 .error-message {
   padding: 0 16px;
   color: tomato;
@@ -426,9 +429,20 @@ img.imgCover{
   fill: #1976d2 !important;
 }
 
-.wrapRadioBtn{
+.orderForm__radioBtns, .orderForm__price{
   max-width: 256px;
   margin: 0 auto;
+}
+.orderForm__price{
+  display: flex;
+  justify-content: flex-start;
+}
+.orderForm__price__count{
+  font-size: 1rem;
+  padding-left: 15px;
+}
+.orderForm__price__title{
+  font-size: 1rem;
 }
 .card_box{
   padding: 50px 5px;
@@ -468,6 +482,10 @@ img.imgCover{
 }
 .wrapOrderInfo{
   min-width: 260px;
+  flex-grow: 2;
+  padding: 10px;
+}
+.grow2{
   flex-grow: 2
 }
 .boxOrderDetail{
@@ -481,15 +499,23 @@ img.imgCover{
 .orderInfo__status{
   text-align: center;
     padding: 5px;
-    font-size: 10px;
+    font-size: 16px;
+    width: 100px;
+    margin: 0 auto;
+    position: absolute;
+    right: 0;
+    top: 0;
   
+}
+.boxOrderDetail__orderInfo{
+  position: relative;
 }
 .orderInfo__status span{
   position: relative;
 }
 .icon-status{
   position: absolute;
-  left: -15px;
+  left: -20px;
   top: 2;
 }
 .orderInfo__price{
@@ -514,6 +540,20 @@ img.imgCover{
 .orderInfo__day{
   font-weight: bold;
 }
+.boxOrders__list{
+  position: relative;
+}
+.boxOrders__notice{
+  position: absolute;
+    right: 0;
+    padding: 16px 10px;
+}
+@media(max-width: 922px){
+  .wrapOrderInfo{
+    flex: 0 0 100%;
+    order: 2;
+  }
+}
 @media(max-width: 777px){
   .boxOrders{
     flex-direction: column;
@@ -522,5 +562,8 @@ img.imgCover{
 @media(max-width: 600px){
   .wrapOrderInfo{
     min-width: 140px;
+  }
+  .boxOrders .col-1{
+    min-width: 270px;
   }
 }

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Card, CardTitle, CardText } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
-import { User, Order } from '../types/userModel';
+import { User, Order, AppState } from '../types/userModel';
 import * as action from '../action';
 import Divider from 'material-ui/Divider';
 import { OrderItemViewModel } from './OrdersList';
@@ -9,12 +9,13 @@ import { OrderStatus } from '../models/Enums';
 import Message from "material-ui/svg-icons/image/lens";
 import Done from "material-ui/svg-icons/action/done";
 import Cancel from "material-ui/svg-icons/content/clear";
+import { Dispatch, connect } from 'react-redux';
 
 
 const style={
   statusIcon:{
-    height: '10px',
-    width: '10px'
+    height: '16px',
+    width: '16px'
   },
   done:{
     color:'#008000'
@@ -22,12 +23,25 @@ const style={
 }
 interface IProps {
   orderViewModel: OrderItemViewModel;
-  updateOrder: (order: Order) => void
+  updateOrder: (order: Order) => void;
 }
 
 class OrderDetail extends React.Component<IProps, any>{
   constructor(props: IProps) {
     super(props);
+    this.handleOrderConfirmed =this.handleOrderConfirmed.bind(this);
+    this.handleOrderReject =this.handleOrderReject.bind(this);
+  }
+
+  handleOrderConfirmed(){
+    var order = this.props.orderViewModel.model;
+    order.orderStatus =  OrderStatus.Confirmed;
+    this.props.updateOrder(order)
+  }
+  handleOrderReject(){
+    var order = this.props.orderViewModel.model;
+    order.orderStatus =  OrderStatus.Canceled;
+    this.props.updateOrder(order)
   }
 
   render() {
@@ -48,18 +62,15 @@ class OrderDetail extends React.Component<IProps, any>{
     })
 
     var orderOnDay = new Date(this.props.orderViewModel.model.orderDate).toLocaleString();
-
     var price = 0;
-    var count = strOrders.map((item) => {
-      return price += item.price
-    })
-
+    strOrders.forEach((item)=>{ price += item.price })
+   
     var statusIcon = <></>;
     var statusText=''
     switch (this.props.orderViewModel.model.orderStatus) {
       case OrderStatus.Pending: {
         statusText ="pending",
-        statusIcon = <Message className="icon-status" style={style.statusIcon}/>
+        statusIcon = <Message className="icon-status pending" style={style.statusIcon}/>
         break;
       }
       case OrderStatus.Confirmed: {
@@ -90,18 +101,18 @@ class OrderDetail extends React.Component<IProps, any>{
             <CardTitle style={{ textAlign: 'center' }}>Detail</CardTitle>
             <Divider />
             <CardText style={{ padding: '5px' }} >
-              <div className="flex-container">
-                <div className="wrapUserImg">
+              <div className="flex-container boxOrderDetail__orderInfo">
+                <div className="wrapUserImg grow2">
                   <img className='imgContCover' src='/assets/user.png' alt="img" />
                 </div>
-                <div className="wrapOrderInfo orderInfo">
+                <div className="wrapOrderInfo grow2 orderInfo">
                   <h3 className="orderInfo__name">{this.props.orderViewModel.user.firstName}</h3>
                   <div className="orderInfo__phone"><i>{this.props.orderViewModel.user.phone}</i></div>
                   <div className="orderInfo__email"><i>{this.props.orderViewModel.user.email}</i></div>
                   <p className="orderInfo__day">{orderOnDay}</p>
                   <ul className="orderInfo__types">{listOrders}</ul>
                 </div>
-                <div className="orderInfo flex-between flex-column">
+                <div className="orderInfo grow2 flex-between flex-column">
                   <div className="orderInfo__status">
                     <span>{statusIcon} {statusText}</span>
                   </div>
@@ -113,10 +124,10 @@ class OrderDetail extends React.Component<IProps, any>{
               </div>
               <div className="button-line flex-end">
                 <div className="pddng">
-                  <RaisedButton type="submit" label="Reject" secondary={true} />
+                  <RaisedButton type="submit" label="Reject" onClick={this.handleOrderReject} secondary={true} />
                 </div>
                 <div className="pddng">
-                  <RaisedButton type="submit" label="Confirm" primary={true} />
+                  <RaisedButton type="submit" label="Confirm" onClick={this.handleOrderConfirmed} primary={true} />
                 </div>
               </div>
             </CardText>
@@ -127,4 +138,16 @@ class OrderDetail extends React.Component<IProps, any>{
   }
 }
 
-export default OrderDetail;
+export function mapStateToProps(state: AppState, ownProps: any) {
+  return {
+  }
+}
+
+export function mapDispatchToProps(dispatch: Dispatch<any>) {
+  return {
+    updateOrder: (order: Order) => { dispatch(action.updateOrderInDB(order)) }
+    // onDeleteUser: (user: User) => { dispatch(action.deleteUserFromDB(user)) }
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(OrderDetail);

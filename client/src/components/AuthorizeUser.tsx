@@ -1,25 +1,27 @@
 import * as React from 'react';
 import { Card, CardHeader } from 'material-ui/Card';
 import Auth from '../models/Auth';
-import { User, Order } from '../types/userModel';
+import { User, Order, AppState } from '../types/userModel';
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
 import Notification from 'material-ui/svg-icons/social/notifications-active'
+import { connect } from 'react-redux';
+import { OrderStatus } from '../models/Enums';
 interface IState {
-  user: User,
-  notification: number,
-  // orders: Order[]
+  user: User
 }
-class AuthorizeUser extends React.Component<any, IState>{
+interface IProps{
+  orders: Array<Order>;
+}
+
+class AuthorizeUser extends React.Component<IProps, IState>{
   /**
    *
    */
-  constructor(props: any) {
+  constructor(props: IProps) {
     super(props);
     this.state = {
       user: new User(),
-      notification: 15,
-      // orders:[]
     }
   }
 
@@ -31,11 +33,18 @@ class AuthorizeUser extends React.Component<any, IState>{
   }
   render() {
     var notification;
-    if (this.state.notification > 0) {
+    var pendingOrders = 0;
+    this.props.orders.map((item:Order)=>{
+      if(item.orderStatus ==OrderStatus.Pending){
+        pendingOrders+=1
+      }
+    })
+
+    if (pendingOrders > 0) {
       notification =
         <div className='icon-notification'>
           <Link to={"/dashboard"} className="wrapIconWithNumb">
-            <span>{this.state.notification}</span>
+            <span>{pendingOrders}</span>
             <Notification style={{ fill: '#00bcd4' }} />
           </Link>
         </div>
@@ -43,7 +52,7 @@ class AuthorizeUser extends React.Component<any, IState>{
       notification =
         <div className='icon-notification'>
           <div className="wrapIconWithNumb">
-            <span>{this.state.notification}</span>
+            <span>{pendingOrders}</span>
             <Notification />
           </div>
         </div>
@@ -65,4 +74,10 @@ class AuthorizeUser extends React.Component<any, IState>{
   }
 
 }
-export default AuthorizeUser;
+
+export function mapStateToProps(state: AppState) {
+  return {
+    orders: state.orders
+  }
+}
+export default connect(mapStateToProps)(AuthorizeUser);
