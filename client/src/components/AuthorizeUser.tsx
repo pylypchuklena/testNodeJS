@@ -49,7 +49,7 @@ class AuthorizeUser extends React.Component<IProps, IState>{
     if (notifeOrders > 0) {
       notification =
         <div className='icon-notification'>
-          <Link to={"/dashboard"} className="wrapIconWithNumb">
+          <Link to={(this.state.user.role=='admin')?"/dashboard":"/user_dashboard"} className="wrapIconWithNumb">
             <span>{notifeOrders}</span>
             <Notification style={{ fill: '#00bcd4' }} />
           </Link>

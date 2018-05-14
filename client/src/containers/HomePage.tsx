@@ -42,10 +42,10 @@ export class HomePage extends React.Component<any, any>{
             <div className="name">
               <h3 className="title">Pylypchuk Anna</h3>
               <h6>Makeup Artist</h6>
-              <a href="#" className="btn btn-just-icon btn-link">
+              <a href="https://www.facebook.com/profile.php?id=100003856183966" target="blank" className="btn btn-just-icon btn-link">
                 <i className="fa fa-facebook-square"></i>
               </a>
-              <a href="#" className="btn btn-just-icon btn-link">
+              <a href="https://www.instagram.com/pylyp.anna/" target="blank" className="btn btn-just-icon btn-link">
                 <i className="fa fa-instagram"></i>
               </a>
               <div className="description flex-align-center"> <span className="btn-link icon"><i className="fa fa-phone"></i> </span> <span>(068) 222 22 22</span></div>
