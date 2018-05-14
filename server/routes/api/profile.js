@@ -36,11 +36,8 @@ router.get('/dashboard', (req, res) => {
 router.put('/profile/:id', (req, res) => {
   //in findByIdAndUpdate return old version user so we findOne updated user and send response
   var updatedUser = req.body;
-  console.log(updatedUser)
   User.findByIdAndUpdate({ _id: req.params.id }, req.body).then((user) => {
-    console.log('find one and update ', user)
     User.findOne({ _id: req.params.id }).then((user) => {
-      console.log('find one', user)
       res.status(200).json({
         user: mapUser(user)
       })

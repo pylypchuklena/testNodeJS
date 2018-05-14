@@ -10,7 +10,7 @@ import { OrderStatus } from '../models/Enums';
 interface IState {
   user: User
 }
-interface IProps{
+interface IProps {
   orders: Array<Order>;
 }
 
@@ -33,18 +33,24 @@ class AuthorizeUser extends React.Component<IProps, IState>{
   }
   render() {
     var notification;
-    var pendingOrders = 0;
-    this.props.orders.map((item:Order)=>{
-      if(item.orderStatus ==OrderStatus.Pending){
-        pendingOrders+=1
+    var notifeOrders = 0;
+    this.props.orders.map((item: Order) => {
+      if (this.state.user.role == "admin") {
+        if (item.orderStatus == OrderStatus.Pending) {
+          notifeOrders += 1
+        }
+      } else {
+        if (item.orderStatus == OrderStatus.Confirmed) {
+          notifeOrders += 1
+        }
       }
     })
 
-    if (pendingOrders > 0) {
+    if (notifeOrders > 0) {
       notification =
         <div className='icon-notification'>
           <Link to={"/dashboard"} className="wrapIconWithNumb">
-            <span>{pendingOrders}</span>
+            <span>{notifeOrders}</span>
             <Notification style={{ fill: '#00bcd4' }} />
           </Link>
         </div>
@@ -52,11 +58,12 @@ class AuthorizeUser extends React.Component<IProps, IState>{
       notification =
         <div className='icon-notification'>
           <div className="wrapIconWithNumb">
-            <span>{pendingOrders}</span>
+            <span>{notifeOrders}</span>
             <Notification />
           </div>
         </div>
     }
+
     return (
       <div className="authorize_box flex-between"  >
         <Link to={"/profile/" + this.state.user.id}>

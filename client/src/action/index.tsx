@@ -2,6 +2,7 @@ import * as constants from '../constants';
 import { User, AppState, Order, Service } from '../types/userModel';
 import axios from 'axios';
 import Auth from '../models/Auth';
+import { OrderFormModel } from '../containers/OrderPage';
 
 export interface IAction {
   type: string;
@@ -23,14 +24,13 @@ export function signUpStatus(status: string): IAction {
 
 export function logInUser(): any {
   return (dispatch: any) => {
-      dispatch({
-        type: constants.LOGGED_IN_USER,
-      })
-   console.log("logIn");
-      //get data for loggedInUser
-      dispatch(getOrdersFromDB());
-      dispatch(getUsersFromDB());
-      dispatch(getServicesFromDB());
+    dispatch({
+      type: constants.LOGGED_IN_USER,
+    })
+    //get data for loggedInUser
+    dispatch(getOrdersFromDB());
+    dispatch(getUsersFromDB());
+    dispatch(getServicesFromDB());
   }
 }
 
@@ -121,6 +121,28 @@ export function deleteUser(user: User): IAction {
   }
 }
 
+
+export function addOrderToDB(order: OrderFormModel): any {
+  return (dispatch: any) => {
+    return axios('/api/order',
+      {
+        method: 'post',
+        data: JSON.stringify({
+          order
+        }),
+        headers: {
+          'Content-type': 'application/json',
+          'Authorization': `bearer ${Auth.getToken()}`
+        }
+      }).then((res) => {
+        if (res.status === 200) {
+          dispatch(addOrder(res.data.order))
+        }
+      })
+  }
+}
+
+
 export function getOrdersFromDB(): any {
   return (dispatch: any) => {
     return axios.get('/api/order',
@@ -133,21 +155,18 @@ export function getOrdersFromDB(): any {
         if (res.status === 200) {
           var filteringOrders = res.data.orders;
           var authUser = Auth.getAuthUser();
-
           if (authUser.role == 'user') {
             filteringOrders = res.data.orders.filter((order: Order) => {
               return authUser.id == order.userId
             })
           }
-
           dispatch(getAllOrders(filteringOrders))
         }
-
       })
   }
 }
 
-export function updateOrderInDB(order:Order): any {
+export function updateOrderInDB(order: Order): any {
   return (dispatch: any) => {
     return axios({
       method: 'put',
@@ -185,14 +204,19 @@ export function deleteOrderInDB(order: string): any {
     )
   }
 }
-
-export function deleteOrder(order:any):IAction{
+export function addOrder(order: Order): IAction {
+  return {
+    type: constants.ADD_ORDER,
+    value: order
+  }
+}
+export function deleteOrder(order: any): IAction {
   return {
     type: constants.DELETE_ORDER,
     value: order
   }
 }
-export function updateOrder(order:any):IAction{
+export function updateOrder(order: any): IAction {
   return {
     type: constants.UPDATE_ORDER,
     value: order
@@ -216,7 +240,7 @@ export function getServicesFromDB(): any {
         }
       }).then((res) => {
         if (res.status === 200) {
-          
+
           dispatch(getAllServices(res.data.services))
         }
       })
@@ -230,9 +254,6 @@ export function getAllServices(services: Service[]): IAction {
   }
 }
 
-export function addService():IAction{
-  return {
-    type: constants.ADD_SERVICES,
-    value: {}
-  }
-}
+
+
+

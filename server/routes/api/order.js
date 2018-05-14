@@ -17,23 +17,55 @@ function mapOrder(item) {
   return mappedOrder;
 }
 
+function validateOrderForm(payload){
+  const errors = {};
+  let isFormValid = true;
+  let message = '';
+
+  if(!payload || !payload.order.types||payload.order.types.length == 0){
+    isFormValid = false;
+    errors.services = 'Services must be more then 0';
+  }
+  if(!payload || new Date() > payload.order.orderDate){
+    isFormValid = false;
+    errors.orderDay = 'Order day must be later then today';
+  }
+  if (!isFormValid) {
+    message = "Check the form for errors";
+  }
+  return{
+    success: isFormValid,
+    message,
+    errors
+  }
+}
+
 router.post('/order', (req, res, next) => {
 
-  //validation
-  var currentDay = new Date();
-  console.log(req.body)
+  //add validation
+  const validationResult = validateOrderForm(req.body)
+
+  if(!validateOrderForm.success){
+    return res.status(400).json({
+      success:false,
+      message: validationResult.message,
+      errors: validateOrderForm.errors
+    })
+  }
+ 
   var neworder = {
     isActive : true,
-    orderDate : req.body.orderDate,
-    type : req.body.types,
+    orderDate : req.body.order.orderDate,
+    type : req.body.order.types,
     userId: req.verifiedUser._id,
     orderStatus: '1',
-    dayOfOrder :currentDay
+    dayOfOrder :new Date()
   }
   Order.create(neworder).then(function (order) {
     return res.status(200).json({
       success: true,
-      message: 'You have successfully'
+      message: 'You have successfully',
+      order: mapOrder(order)
     })
   })
 
@@ -58,12 +90,9 @@ router.get('/order', (req, res) => {
 })
 
 router.put('/order/:id', (req, res, next) => {
-  console.log(req.body);
-  console.log('responce', res.body)
   var updatedOrder = req.body;
   Order.findByIdAndUpdate({ _id: req.params.id }, req.body).then((order) => {
     Order.findOne({ _id: req.params.id }).then((order) => {
-      console.log('find one ', order)
       res.status(200).json({
         success: true,
         message: 'You have successfully',

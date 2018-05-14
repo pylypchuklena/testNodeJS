@@ -46,7 +46,7 @@ class DashboardPage extends React.Component<any, IState>{
         break;
       }
       case ButtonType.NewOrder: {
-        modifiedСontent = <OrderPage />
+        modifiedСontent = <OrderPage doneOrder={()=>{this.handleButtonClick(ButtonType.Orders)}}/>
         break;
       }
       default: {

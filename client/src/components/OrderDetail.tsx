@@ -25,19 +25,15 @@ const style = {
 interface IProps {
   orderViewModel: OrderItemViewModel;
   updateOrder: (order: Order) => void;
-  // deleteOrder: (order:string)=>void;
 }
 
 class OrderDetail extends React.Component<IProps, any>{
   constructor(props: IProps) {
     super(props);
     this.handleStatusChange = this.handleStatusChange.bind(this);
-    // this.handleRejectOrder = this.handleRejectOrder.bind(this);
   }
 
-  // handleRejectOrder(order: string){
-  //   this.props.deleteOrder(order)
-  // }
+
   handleStatusChange(newStatus: OrderStatus) {
     var order = this.props.orderViewModel.model;
     order.orderStatus = newStatus;
@@ -68,8 +64,8 @@ class OrderDetail extends React.Component<IProps, any>{
     var statusIcon = <></>;
     var buttons = <></>;
     var statusText = ''
-    
-      switch (this.props.orderViewModel.model.orderStatus) {
+    var modelStatus = this.props.orderViewModel.model.orderStatus;
+      switch (modelStatus) {
         case OrderStatus.Pending: {
           statusText = "pending",
             statusIcon = <Message className="icon-status pending" style={style.statusIcon} /> ,
@@ -115,6 +111,9 @@ class OrderDetail extends React.Component<IProps, any>{
         <div className="pddng">
           <RaisedButton type="submit" label="Reject" onClick={() => { this.handleStatusChange(OrderStatus.Canceled) }} primary={true} />
         </div>
+        if(modelStatus===OrderStatus.Canceled || modelStatus === OrderStatus.Done || modelStatus ===OrderStatus.Confirmed){
+          buttons=<></>
+        }
     }
 
 
@@ -166,7 +165,6 @@ export function mapStateToProps(state: AppState, ownProps: any) {
 export function mapDispatchToProps(dispatch: Dispatch<any>) {
   return {
     updateOrder: (order: Order) => { dispatch(action.updateOrderInDB(order)) },
-    // deleteOrder:(order: string) => { dispatch(action.deleteOrderInDB(order)) }
   };
 }
 

@@ -4,22 +4,23 @@ import { RaisedButton, TimePicker, DatePicker, Checkbox } from 'material-ui';
 import { Redirect } from 'react-router';
 import Axios from 'axios';
 import Auth from '../models/Auth';
-import { AppState, Service } from '../types/userModel';
+import { AppState, Service, Order } from '../types/userModel';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import * as action from '../action/';
 
-class OrderFormModel {
+export class OrderFormModel {
   types: Array<string> = new Array<string>();
   orderDate: Date = new Date();
 }
 
 interface IProps {
-  services: Service[]
+  services: Service[];
+  addOrder:(order:OrderFormModel)=>void;
+  doneOrder:()=>void;
 }
 
 interface IState {
-  isRedirect: boolean,
   order: OrderFormModel,
   price: number,
   errorMsg: string
@@ -30,7 +31,6 @@ class OrderPage extends React.Component<IProps, IState>{
   constructor(props: any) {
     super(props);
     this.state = {
-      isRedirect: false,
       order: new OrderFormModel(),
       price: 0,
       errorMsg: null
@@ -40,14 +40,11 @@ class OrderPage extends React.Component<IProps, IState>{
     this.onSubmit = this.onSubmit.bind(this);
     this.onChangeDate = this.onChangeDate.bind(this);
     this.onChangeTime = this.onChangeTime.bind(this);
-
   }
 
   handleCancel(e: any) {
     e.preventDefault();
-    this.setState({
-      isRedirect: true
-    })
+    this.props.doneOrder();
   }
 
   onSubmit(e: any) {
@@ -56,29 +53,17 @@ class OrderPage extends React.Component<IProps, IState>{
     var today = new Date();
 
     if (selectedServices.length > 0 && this.state.order.orderDate > today) {
-      Axios('/api/order',
-        {
-          method: 'post',
-          data: JSON.stringify({
-            types: this.state.order.types,
-            orderDate: this.state.order.orderDate,
-          }),
-          headers: {
-            'Content-type': 'application/json',
-            'Authorization': `bearer ${Auth.getToken()}`
-          }
-        }).then((res) => {
-          if (res.status === 200) {
-            this.setState({
-              isRedirect: true
-            })
-          }
+      var newOrder ={
+        types: this.state.order.types,
+        orderDate: this.state.order.orderDate
+      }
+      this.props.addOrder(newOrder);
+      this.props.doneOrder();
+    }else {
+        this.setState({
+          errorMsg: "Fill in all the input data"
         })
-    } else {
-      this.setState({
-        errorMsg: "Fill in all the input data"
-      })
-    }
+      }
   };
 
   onChangeCheckbox(e: any) {
@@ -111,7 +96,6 @@ class OrderPage extends React.Component<IProps, IState>{
     this.setState({ order: changedOrder })
   }
   render() {
-    if (this.state.isRedirect) return (<Redirect to="/" />)
     var services = this.props.services.map(x => { return <Checkbox label={x.name} name={x.type.toString()} key={x._id} onCheck={this.onChangeCheckbox} /> })
     return (
 
@@ -158,15 +142,16 @@ class OrderPage extends React.Component<IProps, IState>{
 
 }
 
-export function mapStateToProps(state: AppState) {
+export function mapStateToProps(state: AppState,ownProps:any) {
   return {
-    services: state.services
+    services: state.services,
+    doneOrder:ownProps.doneOrder
   }
 }
 
 export function mapDispatchToProps(dispatch: Dispatch<any>) {
   return {
-    addService: () => { dispatch(action.addService()) }
+    addOrder: (order:OrderFormModel) => { dispatch(action.addOrderToDB(order)) }
   };
 }
 

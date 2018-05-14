@@ -86,12 +86,16 @@ class OrdersList extends React.Component<IProps, IState>{
 
   render() {
     var bodyListOrder;
+
+    var noOrders = <div className="flex-around">
+    <span>No orders yet.  </span>
+  </div>
+  
     var pendingOrders = 0;
-    if (this.props.orders && this.props.users) {
-      bodyListOrder = this.state.orders.map((item: OrderItemViewModel) => {
+    if (this.state.orders) {
+      bodyListOrder = this.state.orders.filter(x=>(x.model && x.user)).map((item: OrderItemViewModel) => {
         var dayOfOrder = new Date(item.model.dayOfOrder).toLocaleString();
         var orderOnDay = new Date(item.model.orderDate).toLocaleString();
-
         if (item.model.orderStatus == OrderStatus.Pending) {
           pendingOrders += 1
         }
@@ -141,11 +145,7 @@ class OrdersList extends React.Component<IProps, IState>{
 
     }
     if (bodyListOrder.length == 0) {
-      bodyListOrder =
-        <div className="flex-around">
-          <span>No orders yet.  </span>
-          <Link to="/order"> Do first order</Link>
-        </div>
+      bodyListOrder =noOrders;
     }
 
     return (
