@@ -61,6 +61,7 @@ class DashboardPage extends React.Component<any, IState>{
         </div>
         <div className=" main main-raised">
           <div className="card_box">
+  
             <Toolbar style={{ backgroundColor: 'transparent' }}>
               <ToolbarGroup>
                 <RaisedButton

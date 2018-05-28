@@ -7,6 +7,7 @@ import { connect, Dispatch } from 'react-redux';
 import axios from 'axios';
 import * as action from './../action'
 import { FormUser } from './SignUpPage';
+import {Button} from "react-bootstrap";
 
 interface IProps {
   status: string;
@@ -85,6 +86,7 @@ class LoginPage extends React.Component<IProps, IState>{
         <div className="page-header header-filter clear-filter purple-filter bg">
         </div>
         <div className=" main main-raised">
+        <Button>TEST REACT-BOOTSTRAP</Button>
           <LoginForm onSubmit={this.onSubmitUser}
             onChange={this.onChangeFieldUser}
             error={this.state.error}

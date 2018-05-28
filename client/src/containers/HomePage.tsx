@@ -8,7 +8,7 @@ import Auth from '../models/Auth';
 import { MapContainer } from '../components/MapContainer';
 import Axios from 'axios';
 import OrdersList from '../components/OrdersList'
-
+import Button from '@material-ui/core/Button';
 export class HomePage extends React.Component<any, any>{
 
   constructor(props: any) {
@@ -36,10 +36,12 @@ export class HomePage extends React.Component<any, any>{
         </div>
         <div className=" main main-raised">
           <div className="container_box profile">
+          
             <div className="avatar">
               <img src="./assets/img/avatar.jpg" alt="ava" className="img-raised rounded-circle img-fluid" />
             </div>
             <div className="name">
+            <Button variant="raised">Hello World</Button>
               <h3 className="title">Pylypchuk Anna</h3>
               <h6>Makeup Artist</h6>
               <a href="https://www.facebook.com/profile.php?id=100003856183966" target="blank" className="btn btn-just-icon btn-link">
