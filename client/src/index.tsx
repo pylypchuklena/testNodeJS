@@ -11,7 +11,6 @@ import LoginPage from './containers/LoginPage';
 import SignUpPage from './containers/SignUpPage';
 import DashboardPage from './containers/DashboardPage';
 
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 //redux
 import { Provider } from 'react-redux';
@@ -22,6 +21,12 @@ import Profile from './components/Profile';
 import { NotFound } from './components/NotFound';
 import Auth from './models/Auth';
 import * as action from './action';
+import { DataTable } from './components/DataTable';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import BSLayout from './components/BSLayout';
+import TestLoginPage from './components/TestLoginPage';
+
+
 
 const store = createStore(rootReducer, applyMiddleware(thunk))
 
@@ -32,14 +37,17 @@ if(authUser)
   store.dispatch(action.getUsersFromDB());
   store.dispatch(action.getServicesFromDB());
 }
+
+
 ReactDom.render(
   <Provider store={store}>
-    <MuiThemeProvider>
+    <MuiThemeProvider >
 
       <Router>
-        <BaseLayout>
+        {/* <BaseLayout> */}
+        <BSLayout>
           <Switch>
-            <Route exact path="/" component={HomePage} />
+            <Route exact path="/" component={TestLoginPage} />
             <Route path="/login" component={LoginPage} />
             <Route path="/signup" component={SignUpPage} />
             <Route path="/logout" component={Logout} />
@@ -48,7 +56,8 @@ ReactDom.render(
             <PrivateRoute path="/user_dashboard"  component={DashboardPage} />
             <Route path="*" component={NotFound} />
           </Switch>
-        </BaseLayout>
+        </BSLayout>
+        {/* </BaseLayout> */}
       </Router>
 
     </MuiThemeProvider>
